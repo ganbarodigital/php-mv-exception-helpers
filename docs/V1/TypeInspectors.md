@@ -34,10 +34,10 @@ They were originally added to help Exception classes generate a suitable error m
 
     // as an object
     $inspector = new GetPrintableType;
-    string $inspector(mixed $data, int $flags = self::FLAG_NONE);
+    string $inspector(mixed $data, int $flags = self::FLAG_DEFAULTS);
 
     // called directly
-    string GetPrintableType::from(mixed $data, int $flags = self::FLAG_NONE);
+    string GetPrintableType::from(mixed $data, int $flags = self::FLAG_DEFAULTS);
 
 The input parameters are:
 
@@ -48,6 +48,8 @@ The following flags are supported:
 
 * `GetPrintableType::FLAG_NONE` - no extra information required (default behaviour)
 * `GetPrintableType::FLAG_CLASSNAME` - add the class|interface|trait name if `$data` is a PHP object
+
+If `$flags` is not provided, it defaults to `GetPrintableType::FLAG_DEFAULTS`.
 
 `GetPrintableType` returns a `string`, which contains the PHP type of `$data`:
 

@@ -53,6 +53,8 @@ class GetPrintableType
     const FLAG_NONE = 0;
     const FLAG_CLASSNAME = 1;
 
+    const FLAG_DEFAULTS = 1;
+
     /**
      * what PHP type is $data?
      *
@@ -63,7 +65,7 @@ class GetPrintableType
      * @return string
      *         the data type of $data
      */
-    public function __invoke($data, $flags = self::FLAG_CLASSNAME)
+    public function __invoke($data, $flags = self::FLAG_DEFAULTS)
     {
         return self::of($data, $flags);
     }
@@ -78,7 +80,7 @@ class GetPrintableType
      * @return string
      *         the data type of $data
      */
-    public static function of($data, $flags = self::FLAG_CLASSNAME)
+    public static function of($data, $flags = self::FLAG_DEFAULTS)
     {
         if (is_object($data)) {
             return self::returnObjectType($data, $flags);
