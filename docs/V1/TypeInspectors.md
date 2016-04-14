@@ -1,5 +1,8 @@
 ---
-currentMenu: v1typeinspectors
+currentSection: v1
+currentItem: typeinspectors
+pageflow_prev_url: index.html
+pageflow_prev_text: Version 1.x
 ---
 
 # Type Inspectors
@@ -14,30 +17,34 @@ They were originally added to help Exception classes generate a suitable error m
 
 `GetPrintableType` returns the PHP type of the data that you pass to it.
 
-    // how to import
-    use GanbaroDigital\ExceptionHelpers\Types\Inspectors\GetPrintableType;
+```php
+// how to import
+use GanbaroDigital\ExceptionHelpers\V1\Types\Inspectors\GetPrintableType;
 
-    // call directly
-    //
-    // returns a string
-    echo GetPrintableType::of($data);
+// call directly
+//
+// returns a string
+echo GetPrintableType::of($data);
 
-    // use as an object
-    //
-    // returns a string
-    $inspector = new GetPrintableType;
-    echo $inspector($data);
+// use as an object
+//
+// returns a string
+$inspector = new GetPrintableType;
+echo $inspector($data);
+```
 
 ### Signature
 
 `GetPrintableType` can be used as an object, or called directly:
 
-    // as an object
-    $inspector = new GetPrintableType;
-    string $inspector(mixed $data, int $flags = self::FLAG_DEFAULTS);
+```php
+// as an object
+$inspector = new GetPrintableType;
+string $inspector(mixed $data, int $flags = self::FLAG_DEFAULTS);
 
-    // called directly
-    string GetPrintableType::from(mixed $data, int $flags = self::FLAG_DEFAULTS);
+// called directly
+string GetPrintableType::from(mixed $data, int $flags = self::FLAG_DEFAULTS);
+```
 
 The input parameters are:
 
@@ -47,7 +54,7 @@ The input parameters are:
 The following flags are supported:
 
 * `GetPrintableType::FLAG_NONE` - no extra information required (default behaviour)
-* `GetPrintableType::FLAG_CLASSNAME` - add the class|interface|trait name if `$data` is a PHP object
+* `GetPrintableType::FLAG_CLASSNAME` - add the `class`|`interface` name if `$data` is a PHP object
 
 If `$flags` is not provided, it defaults to `GetPrintableType::FLAG_DEFAULTS`.
 
