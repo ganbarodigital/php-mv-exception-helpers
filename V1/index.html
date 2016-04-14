@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Exception Helpers Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Exception Helpers Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers for your exceptions</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/TypeInspectors.html">Type Inspectors</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="changelog.html">Prev: Changelog</a></li>
+                                                      <li><a href="TypeInspectors.html">Next: Type Inspectors</a></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="version-1x">Version 1.x</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Version 1 was written to replace <code>ganbarodigital/php-exceptions</code>. That's a library based on an approach to exception handling that Stuart first introduced on the <strong>php|cruise</strong> back in 2004. It had a good run, but after 12 years we can now do better :)</p>
+<h2 id="key-ideas">Key Ideas</h2>
+<p>The key ideas in Version 1 are:</p>
+<ul>
+<li>Use <a href="http://ganbarodigital.github.io/php-http-status/HttpStatus.html">HttpStatus value objects</a> to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's <code>code</code> property for this.</li>
+<li>Provide base exceptions for other libraries to use. Previously, Stuart provided traits. PHP doesn't see traits as a type hint. This limits what you can do in <code>try/catch</code> blocks.</li>
+<li>Use <code>newFromXXX()</code> style factory methods on exceptions. They allow us to create the same exception from different circumstances. Some people also find them more friendly to use.</li>
+</ul>
+<h2 id="components">Components</h2>
+<p>Version 1 ships with the following components:</p>
+<ul>
+<li><a href="TypeInspectors.html">Type Inspectors</a> - reusable ways for an exception to understand the parameters that have been passed to it.</li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="changelog.html">Prev: Changelog</a></li>
+                                                      <li><a href="TypeInspectors.html">Next: Type Inspectors</a></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-exception-helpers/license.html">New BSD</a> license.
+                                            Find Exception Helpers Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-exception-helpers">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ishi.js"></script>
+    </body>
+</html>

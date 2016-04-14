@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Exception Helpers Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Exception Helpers Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers for your exceptions</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/TypeInspectors.html">Type Inspectors</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Version 1.x</a></li>
+                                                      <li></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="type-inspectors">Type Inspectors</h1>
+<h2 id="purpose">Purpose</h2>
+<p>Use <strong>type inspectors</strong> to work out what type of data you are examining.</p>
+<p>They were originally added to help Exception classes generate a suitable error message.</p>
+<h2 id="getprintabletype">GetPrintableType</h2>
+<p><code>GetPrintableType</code> returns the PHP type of the data that you pass to it.</p>
+<pre><code class="language-php">// how to import
+use GanbaroDigital\ExceptionHelpers\V1\Types\Inspectors\GetPrintableType;
+
+// call directly
+//
+// returns a string
+echo GetPrintableType::of($data);
+
+// use as an object
+//
+// returns a string
+$inspector = new GetPrintableType;
+echo $inspector($data);</code></pre>
+<h3 id="signature">Signature</h3>
+<p><code>GetPrintableType</code> can be used as an object, or called directly:</p>
+<pre><code class="language-php">// as an object
+$inspector = new GetPrintableType;
+string $inspector(mixed $data, int $flags = self::FLAG_DEFAULTS);
+
+// called directly
+string GetPrintableType::from(mixed $data, int $flags = self::FLAG_DEFAULTS);</code></pre>
+<p>The input parameters are:</p>
+<ul>
+<li><code>$data</code> - the PHP variable to examine</li>
+<li><code>$flags</code> - bit-mask of options to add extra information to the return value</li>
+</ul>
+<p>The following flags are supported:</p>
+<ul>
+<li><code>GetPrintableType::FLAG_NONE</code> - no extra information required (default behaviour)</li>
+<li><code>GetPrintableType::FLAG_CLASSNAME</code> - add the <code>class</code>|<code>interface</code> name if <code>$data</code> is a PHP object</li>
+</ul>
+<p>If <code>$flags</code> is not provided, it defaults to <code>GetPrintableType::FLAG_DEFAULTS</code>.</p>
+<p><code>GetPrintableType</code> returns a <code>string</code>, which contains the PHP type of <code>$data</code>:</p>
+<ul>
+<li><code>NULL</code></li>
+<li><code>array</code></li>
+<li><code>boolean</code></li>
+<li><code>callable</code></li>
+<li><code>double</code></li>
+<li><code>integer</code></li>
+<li><code>object</code></li>
+<li><code>resource</code></li>
+<li><code>string</code></li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Version 1.x</a></li>
+                                                      <li></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-exception-helpers/license.html">New BSD</a> license.
+                                            Find Exception Helpers Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-exception-helpers">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ishi.js"></script>
+    </body>
+</html>

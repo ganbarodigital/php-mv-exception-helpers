@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Exception Helpers Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Exception Helpers Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers for your exceptions</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
+                        </li>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                        <main role="main">
+            
+            <article>
+                <h1 id="base-exceptions-v1">Base Exceptions (v1)</h1>
+<h2 id="purpose">Purpose</h2>
+<p>Your exceptions can extend classes defined in the <code>BaseExceptions</code> namespace.</p>
+<h2 id="parameterisedexception">ParameterisedException</h2>
+<p><code>ParameterisedException</code> provides a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
+<pre><code>// import
+use GanbaroDigital\ExceptionHelpers\BaseExceptions\ParameterisedException;
+
+// inherit from ParameterisedException
+class MyException extends ParameterisedException
+{
+    // we recommend using static factory methods for creating exceptions
+    public static function newFromData($data)
+    {
+        return new static($formatString, $data);
+    }
+}</code></pre>
+            </article>
+
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-exception-helpers/license.html">New BSD</a> license.
+                                            Find Exception Helpers Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-exception-helpers">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ishi.js"></script>
+    </body>
+</html>
