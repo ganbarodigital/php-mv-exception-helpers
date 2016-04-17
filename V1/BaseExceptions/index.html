@@ -26,34 +26,67 @@
                                             <li class="">
                             <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
                         </li>
-                                            <li class="">
-                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
                         </li>
                                     </ul>
             </nav>
         </header>
-                                                        <main role="main">
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li></li>
+                                                      <li><a href="ParameterisedException.html">Next: ParameterisedException class</a></li>
+                                </ul>
+            </nav>
             
             <article>
-                <h1 id="base-exceptions-v1">Base Exceptions (v1)</h1>
+                <h1 id="base-exceptions">Base Exceptions</h1>
 <h2 id="purpose">Purpose</h2>
-<p>Your exceptions can extend classes defined in the <code>BaseExceptions</code> namespace.</p>
-<h2 id="parameterisedexception">ParameterisedException</h2>
-<p><code>ParameterisedException</code> provides a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
-<pre><code>// import
-use GanbaroDigital\ExceptionHelpers\BaseExceptions\ParameterisedException;
-
-// inherit from ParameterisedException
-class MyException extends ParameterisedException
-{
-    // we recommend using static factory methods for creating exceptions
-    public static function newFromData($data)
-    {
-        return new static($formatString, $data);
-    }
-}</code></pre>
+<p>This is a collection of base classes that your own exceptions can extend and use.</p>
+<h2 id="available-classes">Available Classes</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="ParameterisedException.html"><code>ParameterisedException</code></a></td>
+<td>exception message is build from a data array</td>
+</tr>
+<tr>
+<td><a href="UnsupportedType.html"><code>UnsupportedType</code></a></td>
+<td>thrown when a PHP variable has the wrong data type</td>
+</tr>
+</tbody>
+</table>
+<p>Click on the name of an exception to see full details.</p>
             </article>
 
+                        <nav class="pageflow">
+              <ul>
+                                    <li></li>
+                                                      <li><a href="ParameterisedException.html">Next: ParameterisedException class</a></li>
+                                </ul>
+            </nav>
                     </main>
 
         <aside class="sidebar">

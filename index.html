@@ -50,6 +50,15 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/changelog.html">Changelog</a>
                                     </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/contributing.html">Contributing</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/code-of-conduct.html">Code of Conduct</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/authors.html">Authors</a>
+                                    </li>
                                                             </ul>
                         </nav>
                     </header>
@@ -73,6 +82,11 @@
 <ul>
 <li>Collect common base classes</li>
 <li>Collect commonly used exception features into reusable helpers</li>
+</ul>
+<h2 id="design-constraints">Design Constraints</h2>
+<p>The library's design is guided by the following constraint(s):</p>
+<ul>
+<li><em>Fundamental dependency of other libraries</em>: This library provides base classes for other libraries to use. Composer does not support multual dependencies (two or more packages depending on each other). As a result, this library needs to depend on very little (if anything at all).</li>
 </ul>
 <h2 id="questions">Questions?</h2>
 <p>This package was created by <a href="http://www.stuartherbert.com">Stuart Herbert</a> for <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Follow <a href="https://twitter.com/ganbarodigital">@ganbarodigital</a> or <a href="https://twitter.com/stuherbert">@stuherbert</a> for updates.</p>

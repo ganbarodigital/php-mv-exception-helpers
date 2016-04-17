@@ -23,79 +23,72 @@
             </a>-->
             <nav class="navbar topbar">
                 <ul>
-                                            <li class="current">
-                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
-                        </li>
                                             <li class="">
-                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
                         </li>
                                     </ul>
             </nav>
         </header>
-                                                        <header role="subnav">
+                                                                            <header role="subnav">
                         <nav class="navbar">
                             <ul>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Home</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/license.html">License</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/installation.html">Installation</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/multivariant.html">Multi-Variant</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
                                     </li>
                                                                     <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/changelog.html">Changelog</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/contributing.html">Contributing</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/code-of-conduct.html">Code of Conduct</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/authors.html">Authors</a>
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
                                     </li>
                                                             </ul>
                         </nav>
                     </header>
-                                                                <main role="main">
+                                            <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="multivariant.html">Prev: Multi-Variant</a></li>
-                                                      <li><a href="contributing.html">Next: Contributing</a></li>
+                                    <li></li>
+                                                      <li><a href="CodeCaller.html">Next: CodeCaller class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="changelog">CHANGELOG</h1>
-<h2 id="develop-branch">develop branch</h2>
-<p>Nothing yet.</p>
-<h2 id="v2016041701">v2016041701</h2>
-<p>Released Sun 17th April 2016.</p>
-<h3 id="new">New</h3>
-<ul>
-<li>Added support for exceptions that can remember relevant data
-<ul>
-<li>added <code>V1\BaseExceptions\ParameterisedException</code></li>
-<li>added <code>V1\BaseExceptions\UnsupportedType</code></li>
-</ul></li>
-<li>Added support for working out who called an exception
-<ul>
-<li>added <code>V1\Callers\Values\CodeCaller</code></li>
-<li>added <code>V1\Callers\Filters\FilterBacktrace</code></li>
-<li>added <code>V1\Callers\Filters\FilterCodeCaller</code></li>
-</ul></li>
-</ul>
+                <h1 id="callers">Callers</h1>
+<h2 id="purpose">Purpose</h2>
+<p>This is a collection of values and helpers for working with a <code>debug_backtrace()</code> stack.</p>
+<h2 id="available-classes">Available Classes</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="CodeCaller.html"><code>CodeCaller</code></a></td>
+<td>value object representing the code that has called our code</td>
+</tr>
+<tr>
+<td><a href="FilterBacktrace.html"><code>FilterBacktrace</code></a></td>
+<td>find the first item in a backtrace that isn't in the filter list</td>
+</tr>
+<tr>
+<td><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code></a></td>
+<td>wrapper around <code>FilterBacktrace</code> that returns a <code>CodeCaller</code> value object.</td>
+</tr>
+</tbody>
+</table>
+<p>Click on the name of a class to see full details.</p>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="multivariant.html">Prev: Multi-Variant</a></li>
-                                                      <li><a href="contributing.html">Next: Contributing</a></li>
+                                    <li></li>
+                                                      <li><a href="CodeCaller.html">Next: CodeCaller class</a></li>
                                 </ul>
             </nav>
                     </main>

@@ -39,7 +39,10 @@
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/TypeInspectors.html">Type Inspectors</a>
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -47,68 +50,78 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Version 1.x</a></li>
-                                                      <li></li>
+                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
+                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="type-inspectors">Type Inspectors</h1>
-<h2 id="purpose">Purpose</h2>
-<p>Use <strong>type inspectors</strong> to work out what type of data you are examining.</p>
-<p>They were originally added to help Exception classes generate a suitable error message.</p>
-<h2 id="getprintabletype">GetPrintableType</h2>
-<p><code>GetPrintableType</code> returns the PHP type of the data that you pass to it.</p>
-<pre><code class="language-php">// how to import
-use GanbaroDigital\ExceptionHelpers\V1\Types\Inspectors\GetPrintableType;
+                <h1 id="parameterisedexception">ParameterisedException</h1>
+<div class="callout info">
+<p>Since version 2016041701.</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>ParameterisedException</code> is a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
+<pre><code class="language-php">// import
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
 
-// call directly
-//
-// returns a string
-echo GetPrintableType::of($data);
+// inherit from ParameterisedException
+class MyException extends ParameterisedException
+{
+    // we recommend using static factory methods for creating exceptions
+    public static function newFromData($data)
+    {
+        return new static($formatString, $data);
+    }
+}</code></pre>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>ParameterisedException</code> has the following public interface:</p>
+<pre><code class="language-php">/**
+ * ParameterisedException provides a data-oriented base class for your exceptions
+ */
+class ParameterisedException extends RuntimeException
+{
+    /**
+     * our constructor
+     *
+     * @param string $formatString
+     *        the sprintf() format string for our human-readable message
+     * @param array $data
+     *        the data required to sprintf() with $formatString
+     * @param int $code
+     *        the error code that you want to set (if any)
+     */
+    public function __construct($formatString, $data = [], $code = 0);
 
-// use as an object
-//
-// returns a string
-$inspector = new GetPrintableType;
-echo $inspector($data);</code></pre>
-<h3 id="signature">Signature</h3>
-<p><code>GetPrintableType</code> can be used as an object, or called directly:</p>
-<pre><code class="language-php">// as an object
-$inspector = new GetPrintableType;
-string $inspector(mixed $data, int $flags = self::FLAG_DEFAULTS);
+    /**
+     * what was the data that we used to create the printable message?
+     *
+     * @return array
+     */
+    public function getMessageData();
 
-// called directly
-string GetPrintableType::from(mixed $data, int $flags = self::FLAG_DEFAULTS);</code></pre>
-<p>The input parameters are:</p>
-<ul>
-<li><code>$data</code> - the PHP variable to examine</li>
-<li><code>$flags</code> - bit-mask of options to add extra information to the return value</li>
-</ul>
-<p>The following flags are supported:</p>
-<ul>
-<li><code>GetPrintableType::FLAG_NONE</code> - no extra information required (default behaviour)</li>
-<li><code>GetPrintableType::FLAG_CLASSNAME</code> - add the <code>class</code>|<code>interface</code> name if <code>$data</code> is a PHP object</li>
-</ul>
-<p>If <code>$flags</code> is not provided, it defaults to <code>GetPrintableType::FLAG_DEFAULTS</code>.</p>
-<p><code>GetPrintableType</code> returns a <code>string</code>, which contains the PHP type of <code>$data</code>:</p>
-<ul>
-<li><code>NULL</code></li>
-<li><code>array</code></li>
-<li><code>boolean</code></li>
-<li><code>callable</code></li>
-<li><code>double</code></li>
-<li><code>integer</code></li>
-<li><code>object</code></li>
-<li><code>resource</code></li>
-<li><code>string</code></li>
-</ul>
+    /**
+     * what was the format string we used to create the printable message?
+     *
+     * @return string
+     */
+    public function getMessageFormat();
+}</code></pre>
+<h2 id="notes">Notes</h2>
+<h3 id="named-parameters-in-the-format-string">Named Parameters In The Format String</h3>
+<p>Internally, <code>ParameterisedException</code> uses <a href="http://ganbarodigital.github.io/php-the-missing-bits/strings/vnsprintf.html"><code>vnsprintf()</code></a> from <em><a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a></em>. This allows you to use <em>named parameters</em> in the format string:</p>
+<pre><code class="language-php">$format = "Value must be between %min\$s and %max\$s inclusively";
+$data = [
+    'min' =&gt; 10,
+    'max' =&gt; 20,
+];
+throw new ParameterisedException($format, $data);</code></pre>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Version 1.x</a></li>
-                                                      <li></li>
+                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
+                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
                                 </ul>
             </nav>
                     </main>

@@ -35,11 +35,11 @@
                                                                             <header role="subnav">
                         <nav class="navbar">
                             <ul>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
@@ -50,49 +50,77 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                    <li><a href="ParameterisedException.html">Prev: ParameterisedException class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="version-1x">Version 1.x</h1>
-<h2 id="introduction">Introduction</h2>
-<p>Version 1 was written to replace <code>ganbarodigital/php-exceptions</code>. That's a library based on an approach to exception handling that Stuart first introduced on the <strong>php|cruise</strong> back in 2004. It had a good run, but after 12 years we can now do better :)</p>
-<h2 id="key-ideas">Key Ideas</h2>
-<p>The key ideas in Version 1 are:</p>
+                <h1 id="unsupportedtype">UnsupportedType</h1>
+<div class="callout info">
+<p>Since version 2016041701.</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>UnsupportedType</code> is an exception thrown when a function or method is passed a parameter that has the wrong data type.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>UnsupportedType</code> has the following public interface:</p>
+<pre><code class="language-php">// our base class and interface(s)
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+
+// return types from our method(s)
+use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
+
+// how to import
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedType;
+
+// public interface
+class UnsupportedType extends ParameterisedException implements HttpStatusProvider
+{
+    /**
+     * create a new exception
+     *
+     * @param  mixed $var
+     *         the variable that has the unsupported type
+     * @param  string $fieldOrVarName
+     *         the name of the input field, PHP variable or function/method
+     *         parameter that contains $data
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final exception message?
+     * @param  array|null $callerFilter
+     *         are there any namespaces we want to filter out of the call stack?
+     * @return UnsupportedType
+     *         an fully-built exception for you to throw
+     */
+    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
+
+    /**
+     * which HTTP status code do we map onto?
+     * @return UnprocessableEntityStatusProvider
+     */
+    public function getHttpStatus();
+}
+</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<p>You can use this exception class in one of two ways:</p>
 <ul>
-<li>Provide base exceptions for other libraries to use. Previously, Stuart provided traits. PHP doesn't see traits as a type hint. This limits what you can do in <code>try/catch</code> blocks.</li>
-<li>Use <code>newFromXXX()</code> style factory methods on exceptions. They allow us to create the same exception from different circumstances. Some people also find them more friendly to use.</li>
-<li>Use <a href="http://ganbarodigital.github.io/php-http-status/HttpStatus.html">HttpStatus value objects</a> to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's <code>code</code> property for this. That's fine in most cases, as most exceptions typically do not use the <code>code</code> property. This way makes it crystal clear which HTTP status an exception maps onto, and it frees up the <code>code</code> property just in case anyone does need to use it for their own error codes.</li>
+<li>throw new instances of it, or</li>
+<li>create your own <code>UnsupportedType</code> subclass in your own library, and throw those</li>
 </ul>
-<h2 id="components">Components</h2>
-<p>Version 1 ships with the following components:</p>
-<table>
-<thead>
-<tr>
-<th>Namespace</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="BaseExceptions/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\BaseExceptions</code></a></td>
-<td>base classes to build your own exceptions from</td>
-</tr>
-<tr>
-<td><a href="Callers/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\Callers</code></a></td>
-<td>work out who has thrown an exception</td>
-</tr>
-</tbody>
-</table>
-<p>Click on the namespace to learn more about the classes in that component.</p>
+<p>We recommend the second approach. It allows you to ensure that all of your library's exceptions have a common base class / interface. This can make <code>try/catch</code> blocks easier to write.</p>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
+<li><a href="http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html"><code>HttpStatusProvider</code> interface</a></li>
+</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                    <li><a href="ParameterisedException.html">Prev: ParameterisedException class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>

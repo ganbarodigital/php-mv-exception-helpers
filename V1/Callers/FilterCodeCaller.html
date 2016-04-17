@@ -35,14 +35,14 @@
                                                                             <header role="subnav">
                         <nav class="navbar">
                             <ul>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
                                     </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -50,49 +50,101 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                    <li><a href="FilterBacktrace.html">Prev: FilterBacktrace class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="version-1x">Version 1.x</h1>
-<h2 id="introduction">Introduction</h2>
-<p>Version 1 was written to replace <code>ganbarodigital/php-exceptions</code>. That's a library based on an approach to exception handling that Stuart first introduced on the <strong>php|cruise</strong> back in 2004. It had a good run, but after 12 years we can now do better :)</p>
-<h2 id="key-ideas">Key Ideas</h2>
-<p>The key ideas in Version 1 are:</p>
+                <h1 id="filtercodecaller">FilterCodeCaller</h1>
+<div class="callout info">
+<p>Since version 2016041701.</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>FilterCodeCaller</code> is a data filter. It is a wrapper around <a href="FilterBacktrace.html"><code>FilterBacktrace</code></a>. It converts <code>FilterBacktrace</code>'s return value into a <a href="CodeCaller.html"><code>CodeCaller</code></a> value object.</p>
+<p><code>FilterCodeCaller</code> was introduced for use in the <code>UnsupportedType</code> exception.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>FilterCodeCaller</code> has the following public interface:</p>
+<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+
+class FilterCodeCaller
+{
+    /**
+     * recommended list of namespaces to filter from
+     *
+     * DO NOT CHANGE THIS ARRAY FROM YOUR CODE
+     *
+     * @var array
+     */
+    public static $DEFAULT_PARTIALS = [
+        'Checks' =&gt; 'Checks',
+        'Exceptions' =&gt; 'Exceptions',
+        'Requirements' =&gt; 'Requirements',
+    ];
+
+    /**
+     * work out who has called a piece of code
+     *
+     * @param  array $backtrace
+     *         the debug_backtrace() return value
+     * @param  array $partialsToFilterOut
+     *         a list of partial namespaces to skip over
+     * @return CodeCaller
+     */
+    public function __invoke($backtrace, $partialsToFilterOut = []);
+
+    /**
+     * work out who has called a piece of code
+     *
+     * @param  array $backtrace
+     *         the debug_backtrace() return value
+     * @param  array $partialsToFilterOut
+     *         a list of partial namespaces to skip over
+     * @return CodeCaller
+     */
+    public static function from($backtrace, $partialsToFilterOut = []);
+}
+</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<p><code>FilterCodeCaller</code> can be used as an object, or as a static class method.</p>
+<pre><code class="language-php">// import first
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
+
+// we need a stack trace
+// use DEBUG_BACKTRACE_IGNORE_ARGS to keep the trace very small
+$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+// we need a list of namespaces to filter out
+//
+// this can be individual parts of namespaces, or whole classnames
+$partials = [
+    'Checks',
+    'Requirements',
+    FilterCodeCaller::class,
+];
+
+// to use as an object
+$filter = new FilterCodeCaller;
+$caller = $filter($trace, $partials);
+
+// to call statically
+$caller = FilterCodeCaller::from($trace, $partials);</code></pre>
+<h2 id="return-value">Return Value</h2>
+<p><code>FilterCodeCaller</code> returns a <code>CodeCaller</code> value object. This object will contain details about the first entry on the <code>debug_backtrace()</code> stack that passed filtering.</p>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
 <ul>
-<li>Provide base exceptions for other libraries to use. Previously, Stuart provided traits. PHP doesn't see traits as a type hint. This limits what you can do in <code>try/catch</code> blocks.</li>
-<li>Use <code>newFromXXX()</code> style factory methods on exceptions. They allow us to create the same exception from different circumstances. Some people also find them more friendly to use.</li>
-<li>Use <a href="http://ganbarodigital.github.io/php-http-status/HttpStatus.html">HttpStatus value objects</a> to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's <code>code</code> property for this. That's fine in most cases, as most exceptions typically do not use the <code>code</code> property. This way makes it crystal clear which HTTP status an exception maps onto, and it frees up the <code>code</code> property just in case anyone does need to use it for their own error codes.</li>
+<li><a href="CodeCaller.html"><code>CodeCaller</code> value object</a></li>
+<li><a href="FilterBacktrace.html"><code>FilterBacktrace</code> class</a></li>
 </ul>
-<h2 id="components">Components</h2>
-<p>Version 1 ships with the following components:</p>
-<table>
-<thead>
-<tr>
-<th>Namespace</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="BaseExceptions/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\BaseExceptions</code></a></td>
-<td>base classes to build your own exceptions from</td>
-</tr>
-<tr>
-<td><a href="Callers/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\Callers</code></a></td>
-<td>work out who has thrown an exception</td>
-</tr>
-</tbody>
-</table>
-<p>Click on the namespace to learn more about the classes in that component.</p>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                    <li><a href="FilterBacktrace.html">Prev: FilterBacktrace class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>
