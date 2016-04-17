@@ -68,9 +68,9 @@ class ParameterisedException extends RuntimeException
      * our constructor
      *
      * @param string $formatString
-     *        the printf() format string for our human-readable message
+     *        the sprintf() format string for our human-readable message
      * @param array $data
-     *        the data required to printf() with $formatString
+     *        the data required to sprintf() with $formatString
      * @param int $code
      *        the error code that you want to set (if any)
      */
@@ -81,7 +81,10 @@ class ParameterisedException extends RuntimeException
         $this->data = $data;
 
         // build the printable message
-        $message = vsprintf($formatString, $data);
+        //
+        // this uses vnsprintf() from ganbarodigital/php-the-missing-bits
+        // to support named parameters in the format string :)
+        $message = vnsprintf($formatString, $data);
         parent::__construct($message, $code);
     }
 

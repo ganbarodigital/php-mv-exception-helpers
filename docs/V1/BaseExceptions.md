@@ -1,26 +1,21 @@
 ---
-currentMenu: v1exceptions
+currentSection: v1
+currentItem: baseexceptions
+pageflow_prev_url: index.html
+pageflow_prev_text: Version 1.x
+pageflow_next_url: TypeInspectors.html
+pageflow_next_text: Type Inspectors
+
 ---
 
-# Base Exceptions (v1)
+# Base Exceptions
 
 ## Purpose
 
-Your exceptions can extend classes defined in the `BaseExceptions` namespace.
+This is a collection of base classes that your own exceptions can extend and use.
 
-## ParameterisedException
+Class | Description
+------|------------
+[`ParameterisedException`](ParameterisedException.html) | exception message is build from a data array
 
-`ParameterisedException` provides a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.
-
-    // import
-    use GanbaroDigital\ExceptionHelpers\BaseExceptions\ParameterisedException;
-
-    // inherit from ParameterisedException
-    class MyException extends ParameterisedException
-    {
-        // we recommend using static factory methods for creating exceptions
-        public static function newFromData($data)
-        {
-            return new static($formatString, $data);
-        }
-    }
+Click on the name of an exception to see full details.

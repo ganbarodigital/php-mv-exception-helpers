@@ -41,6 +41,15 @@ menu:
             changelog:
                 text: Changelog
                 relativeUrl: changelog.html
+            contributing:
+                text: Contributing
+                relativeUrl: contributing.html
+            codeofconduct:
+                text: Code of Conduct
+                relativeUrl: code-of-conduct.html
+            authors:
+                text: Authors
+                relativeUrl: authors.html
 
     v1:
         text: Version 1.x
@@ -50,6 +59,6 @@ menu:
             home:
                 text: Introduction
                 relativeUrl: V1/index.html
-            typeinspectors:
-                text: Type Inspectors
-                relativeUrl: V1/TypeInspectors.html
+            baseexceptions:
+                text: Base Exceptions
+                relativeUrl: V1/BaseExceptions.html

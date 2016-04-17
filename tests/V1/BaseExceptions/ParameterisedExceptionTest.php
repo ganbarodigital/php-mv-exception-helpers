@@ -168,6 +168,32 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::__construct
+     */
+    public function testFormatStringSupportsNamedParameters()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $formatString = "welcome, %type\$s, to %place\$s";
+        $messageData  = [ 'type' => 'human', 'place' => 'the new world' ];
+        $expectedMessage = "welcome, human, to the new world";
+        $expectedCode = 500;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new ParameterisedException($formatString, $messageData, $expectedCode);
+
+        $actualMessage = $unit->getMessage();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+    }
+
+    /**
      * @covers ::getMessageData
      */
     public function testCanGetMessageData()

@@ -1,10 +1,8 @@
 ---
 currentSection: v1
 currentItem: home
-pageflow_prev_url: changelog.html
-pageflow_prev_text: Changelog
-pageflow_next_url: TypeInspectors.html
-pageflow_next_text: Type Inspectors
+pageflow_next_url: BaseExceptions.html
+pageflow_next_text: Base Exceptions
 ---
 
 # Version 1.x
