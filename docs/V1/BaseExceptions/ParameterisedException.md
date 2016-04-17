@@ -9,8 +9,8 @@ pageflow_next_text: UnsupportedType class
 
 # ParameterisedException
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release.
+<div class="callout info" markdown="1">
+Since version 2016041701.
 </div>
 
 ## Description

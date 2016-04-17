@@ -10,6 +10,14 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v2016041701
+
+Released Sun 17th April 2016.
+
+### New
+
 * Added support for exceptions that can remember relevant data
   - added `V1\BaseExceptions\ParameterisedException`
   - added `V1\BaseExceptions\UnsupportedType`
