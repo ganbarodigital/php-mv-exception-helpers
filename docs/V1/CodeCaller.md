@@ -17,6 +17,8 @@ Not yet in a tagged release.
 
 `CodeCaller` is a value object. It represents a stack frame on a `debug_backtrace()` stack.
 
+[`FilterCodeCaller`](FilterCodeCaller.html) will build a `CodeCaller` object for you.
+
 ## Public Interface
 
 `CodeCaller` has the following public interface:
@@ -102,4 +104,4 @@ None at this time.
 
 ## See Also
 
-Nothing at this time.
+* [`FilterCodeCaller` class](FilterCodeCaller.html)

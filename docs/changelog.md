@@ -15,3 +15,4 @@ pageflow_next_text: Contributing
 * Added support for working out who called an exception
   - added `V1\Callers\Values\CodeCaller`
   - added `V1\Callers\Filters\FilterBacktrace`
+  - added `V1\Callers\Filters\FilterCodeCaller`
