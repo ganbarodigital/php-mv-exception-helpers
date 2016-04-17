@@ -74,6 +74,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
      * @covers ::__invoke
      * @covers ::from
      * @covers ::isClassNameOkay
+     * @covers ::extractFrameDetails
      */
     public function testCanUseAsObject()
     {
@@ -101,6 +102,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::from
      * @covers ::isClassNameOkay
+     * @covers ::extractFrameDetails
      */
     public function testCanCallStatically()
     {
@@ -126,6 +128,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::from
+     * @covers ::extractFrameDetails
      */
     public function testWillReturnGlobalFunctions()
     {
@@ -136,6 +139,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
             'file' => __FILE__,
             'line' => __LINE__,
             'function' => "testFunction",
+            'class' => null,
         ];
 
         $backtrace = [
@@ -196,6 +200,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::from
+     * @covers ::extractFrameDetails
      */
     public function testReturnsFirstStackFrameWhenEverythingElseFilteredOut()
     {

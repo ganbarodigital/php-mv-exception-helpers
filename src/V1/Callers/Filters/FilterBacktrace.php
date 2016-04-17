@@ -79,17 +79,17 @@ class FilterBacktrace
         foreach ($backtrace as $frame) {
             if (!isset($frame['class'])) {
                 // called from global function
-                return $frame;
+                return self::extractFrameDetails($frame);
             }
 
             // do we want to skip over this class name?
             if (self::isClassNameOkay($frame['class'], $partialsToFilterOut)) {
-                return $frame;
+                return self::extractFrameDetails($frame);
             }
         }
 
         // if we get here, then we have run out of places to look
-        return $backtrace[0];
+        return self::extractFrameDetails($backtrace[0]);
     }
 
     /**
@@ -117,5 +117,33 @@ class FilterBacktrace
         // if we get here, then this class isn't one that we want to return
         // to the caller
         return false;
+    }
+
+    /**
+     * extract only the stack frame fields we are interested in
+     *
+     * guarantees that the return value contains all four keys, even if they
+     * are missing from the stack frame
+     *
+     * @param  array $frame
+     *         a stack frame from `debug_backtrace`
+     * @return array
+     *         contains class, function, file, and line
+     */
+    private static function extractFrameDetails($frame)
+    {
+        $retval = [
+            'class' => null,
+            'function' => null,
+            'file' => null,
+            'line' => null,
+        ];
+
+        // we only want entries from the $frame array that we intend to return
+        $parts = array_intersect_key($frame, $retval);
+        $retval = array_merge($retval, $parts);
+
+        // all done
+        return $retval;
     }
 }
