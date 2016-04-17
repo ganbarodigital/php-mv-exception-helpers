@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: baseexceptions
 pageflow_prev_url: index.html
 pageflow_prev_text: Version 1.x
-pageflow_next_url: TypeInspectors.html
-pageflow_next_text: Type Inspectors
+pageflow_next_url: ParameterisedException.html
+pageflow_next_text: ParameterisedException class
 
 ---
 

@@ -15,12 +15,12 @@ Version 1 was written to replace `ganbarodigital/php-exceptions`. That's a libra
 
 The key ideas in Version 1 are:
 
-* Use [HttpStatus value objects](http://ganbarodigital.github.io/php-http-status/HttpStatus.html) to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's `code` property for this.
 * Provide base exceptions for other libraries to use. Previously, Stuart provided traits. PHP doesn't see traits as a type hint. This limits what you can do in `try/catch` blocks.
 * Use `newFromXXX()` style factory methods on exceptions. They allow us to create the same exception from different circumstances. Some people also find them more friendly to use.
+* Use [HttpStatus value objects](http://ganbarodigital.github.io/php-http-status/HttpStatus.html) to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's `code` property for this. That's fine in most cases, as most exceptions typically do not use the `code` property. This way makes it crystal clear which HTTP status an exception maps onto, and it frees up the `code` property just in case anyone does need to use it for their own error codes.
 
 ## Components
 
 Version 1 ships with the following components:
 
-* [Type Inspectors](TypeInspectors.html) - reusable ways for an exception to understand the parameters that have been passed to it.
+* [Base Exceptions](BaseExceptions.html) - base classes to build your own exceptions from

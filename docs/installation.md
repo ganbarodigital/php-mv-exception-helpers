@@ -17,7 +17,7 @@ The _Exception Helpers Library_ is available via Packagist:
 
 ## From Github
 
-The source code for the _Exception Helpers Library_ is available from [Github](https://github.com):
+The [source code for the _Exception Helpers Library_](https://github.com/ganbarodigital/php-mv-exception-helpers) is available from [Github](https://github.com):
 
     git clone https://github.com/ganbarodigital/php-mv-exception-helpers.git
 
