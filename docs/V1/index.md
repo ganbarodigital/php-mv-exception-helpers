@@ -1,7 +1,7 @@
 ---
 currentSection: v1
 currentItem: home
-pageflow_next_url: BaseExceptions.html
+pageflow_next_url: BaseExceptions/index.html
 pageflow_next_text: Base Exceptions
 ---
 
@@ -23,4 +23,9 @@ The key ideas in Version 1 are:
 
 Version 1 ships with the following components:
 
-* [Base Exceptions](BaseExceptions.html) - base classes to build your own exceptions from
+Namespace | Purpose
+----------|--------
+[`GanbaroDigital\ExceptionHelpers\V1\BaseExceptions`](BaseExceptions/index.html) | base classes to build your own exceptions from
+[`GanbaroDigital\ExceptionHelpers\V1\Callers`](Callers/index.html) | work out who has thrown an exception
+
+Click on the namespace to learn more about the classes in that component.

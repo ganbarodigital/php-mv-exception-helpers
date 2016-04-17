@@ -61,7 +61,7 @@ menu:
                 relativeUrl: V1/index.html
             baseexceptions:
                 text: Base Exceptions
-                relativeUrl: V1/BaseExceptions.html
+                relativeUrl: V1/BaseExceptions/index.html
             callers:
                 text: Callers
-                relativeUrl: V1/Callers.html
+                relativeUrl: V1/Callers/index.html

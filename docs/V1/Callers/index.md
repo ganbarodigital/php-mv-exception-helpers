@@ -1,8 +1,6 @@
 ---
 currentSection: v1
 currentItem: callers
-pageflow_prev_url: BaseExceptions.html
-pageflow_prev_text: BaseExceptions
 pageflow_next_url: CodeCaller.html
 pageflow_next_text: CodeCaller class
 

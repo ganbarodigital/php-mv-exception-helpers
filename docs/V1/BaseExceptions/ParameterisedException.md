@@ -1,8 +1,10 @@
 ---
 currentSection: v1
 currentItem: baseexceptions
-pageflow_prev_url: BaseExceptions.html
+pageflow_prev_url: index.html
 pageflow_prev_text: BaseExceptions
+pageflow_next_url: UnsupportedType.html
+pageflow_next_text: UnsupportedType class
 ---
 
 # ParameterisedException
