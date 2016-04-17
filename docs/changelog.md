@@ -14,3 +14,4 @@ pageflow_next_text: Contributing
   - added `V1\BaseExceptions\ParameterisedException`
 * Added support for working out who called an exception
   - added `V1\Callers\Values\CodeCaller`
+  - added `V1\Callers\Filters\FilterBacktrace`

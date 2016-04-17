@@ -17,5 +17,6 @@ This is a collection of values and helpers for working with a `debug_backtrace()
 Class | Description
 ------|------------
 [`CodeCaller`](CodeCaller.html) | value object representing the code that has called our code
+[`FilterBacktrace`](FilterBacktrace.html) | find the first item in a backtrace that isn't in the filter list
 
-Click on the name of an exception to see full details.
+Click on the name of a class to see full details.
