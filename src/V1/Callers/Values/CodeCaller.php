@@ -189,10 +189,10 @@ class CodeCaller
     {
         // we have been called from a class, a function, or a PHP script
         if (isset($this->class)) {
-            $retval = $this->class . '::' . $this->function;
+            $retval = $this->class . '::' . $this->function . '()';
         }
         else if (isset($this->function)) {
-            $retval = $this->function;
+            $retval = $this->function . '()';
         }
         else {
             $retval = $this->file;

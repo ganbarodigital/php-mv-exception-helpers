@@ -278,8 +278,8 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
     public function provideDetails()
     {
         return [
-            [ __CLASS__, __METHOD__, __FILE__, __LINE__, __CLASS__ . '::' . __METHOD__ . '@' . __LINE__ ],
-            [ null, __METHOD__, __FILE__, __LINE__,  __METHOD__ . '@' . __LINE__ ],
+            [ __CLASS__, __METHOD__, __FILE__, __LINE__, __CLASS__ . '::' . __METHOD__ . '()@' . __LINE__ ],
+            [ null, __METHOD__, __FILE__, __LINE__,  __METHOD__ . '()@' . __LINE__ ],
             [ null, null, __FILE__, __LINE__, __FILE__ . '@' . __LINE__ ],
         ];
     }
