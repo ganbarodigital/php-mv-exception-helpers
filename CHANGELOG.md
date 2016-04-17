@@ -1,5 +1,1 @@
-# CHANGELOG
-
-## develop branch
-
-Nothing yet.
+docs/changelog.md
