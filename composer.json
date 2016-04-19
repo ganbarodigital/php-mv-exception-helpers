@@ -5,13 +5,19 @@
     "authors": [
         { "name": "Stuart Herbert", "email": "stuart@stuartherbert.com" }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/stuartherbert/Couscous"
+        }
+    ],
     "require": {
         "php": ">= 5.5",
-        "couscous/couscous": "^1.5",
         "ganbarodigital/php-http-status": "^1.0",
         "ganbarodigital/php-the-missing-bits": "^1.1"
     },
     "require-dev": {
+        "couscous/couscous": "dev-develop",
         "phpunit/phpunit": "^4.6"
     },
     "autoload": {

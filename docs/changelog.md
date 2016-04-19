@@ -10,7 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Docs
+
+* Switched to downloading template from Github
+* Switched to Stuart's fork of Couscous
+* Made Couscous a dev dependency
 
 ## v1.2016041701
 
