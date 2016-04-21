@@ -140,6 +140,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
             'line' => __LINE__,
             'function' => "testFunction",
             'class' => null,
+            'stackIndex' => 0,
         ];
 
         $backtrace = [
@@ -232,4 +233,59 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedClass, $actualFrame['class']);
         $this->assertEquals($expectedMethod, $actualFrame['function']);
     }
+
+    /**
+     * @covers ::from
+     * @covers ::extractFrameDetails
+     */
+    public function testCanSearchFromAnywhereInTheStack()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $partials = [];
+
+        $expectedClass = "ReflectionMethod";
+        $expectedMethod = "invokeArgs";
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualFrame = FilterBacktrace::from($backtrace, $partials, 1);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedClass, $actualFrame['class']);
+        $this->assertEquals($expectedMethod, $actualFrame['function']);
+    }
+
+    /**
+     * @covers ::from
+     * @covers ::extractFrameDetails
+     */
+    public function testReturnsLastStackFrameWhenStartingSearchBeyondTheStack()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $partials = [];
+
+        $expectedClass = "PHPUnit_TextUI_Command";
+        $expectedMethod = "main";
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualFrame = FilterBacktrace::from($backtrace, $partials, 300);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedClass, $actualFrame['class']);
+        $this->assertEquals($expectedMethod, $actualFrame['function']);
+    }
+
 }

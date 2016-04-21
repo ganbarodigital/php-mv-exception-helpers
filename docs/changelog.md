@@ -10,6 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+### New
+
+* Added support for searching a stack trace multiple times
+  - added `$index` parameter to `FilterBacktrace`
+
 ## v1.2016041901
 
 ### Docs
