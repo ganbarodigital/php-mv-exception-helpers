@@ -8,7 +8,7 @@ pageflow_prev_text: ParameterisedException class
 # UnsupportedType
 
 <div class="callout info" markdown="1">
-Since version 2016041701.
+Since v1.2016041701
 </div>
 
 ## Description

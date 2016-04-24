@@ -10,6 +10,10 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+## v1.2016042401
+
+Released Sun 24th April 2016.
+
 ### New
 
 * Added support for searching a stack trace multiple times
@@ -17,6 +21,8 @@ pageflow_next_text: Contributing
   - added `FilterBacktraceForTwoCodeCallers`
 
 ## v1.2016041901
+
+Released Tue 19th April 2016.
 
 ### Docs
 
