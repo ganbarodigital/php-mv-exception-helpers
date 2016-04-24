@@ -65,6 +65,13 @@ class CodeCaller
     private $function;
 
     /**
+     * how was the function or method called?
+     *
+     * @var string|null
+     */
+    private $callType;
+
+    /**
      * which file was the code in?
      *
      * @var string|null
@@ -92,6 +99,8 @@ class CodeCaller
      *        which class called us?
      * @param string|null $function
      *        which function or method called us?
+     * @param string|null $callType
+     *        how was $function called?
      * @param string|null $file
      *        which file was the calling code in?
      * @param int|null $line
@@ -99,10 +108,11 @@ class CodeCaller
      * @param array $stack
      *        what was the call stack at the time?
      */
-    public function __construct($class, $function, $file, $line, $stack = [])
+    public function __construct($class, $function, $callType, $file, $line, $stack = [])
     {
         $this->class = $class;
         $this->function = $function;
+        $this->callType = $callType;
         $this->file = $file;
         $this->line = $line;
         $this->stack = $stack;
@@ -139,6 +149,16 @@ class CodeCaller
             return null;
         }
         return $this->function;
+    }
+
+    /**
+     * how was the function|method called?
+     *
+     * @return string|null
+     */
+    public function getCallType()
+    {
+        return $this->callType;
     }
 
     /**
@@ -189,7 +209,7 @@ class CodeCaller
     {
         // we have been called from a class, a function, or a PHP script
         if (isset($this->class)) {
-            $retval = $this->class . '::' . $this->function . '()';
+            $retval = $this->class . $this->callType . $this->function . '()';
         }
         else if (isset($this->function)) {
             $retval = $this->function . '()';
@@ -205,5 +225,15 @@ class CodeCaller
 
         // all done
         return $retval;
+    }
+
+    /**
+     * return our contents as a sensible, printable string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getCaller();
     }
 }

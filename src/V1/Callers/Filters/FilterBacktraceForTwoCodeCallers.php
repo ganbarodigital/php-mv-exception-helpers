@@ -84,8 +84,8 @@ class FilterBacktraceForTwoCodeCallers
 
         // convert the stack frame into something that's easier to use
         $retval = [
-            new CodeCaller($frame1['class'], $frame1['function'], $frame1['file'], $frame1['line']),
-            new CodeCaller($frame2['class'], $frame2['function'], $frame2['file'], $frame2['line']),
+            new CodeCaller($frame1['class'], $frame1['function'], $frame1['type'], $frame1['file'], $frame1['line']),
+            new CodeCaller($frame2['class'], $frame2['function'], $frame2['type'], $frame2['file'], $frame2['line']),
         ];
 
         // all done

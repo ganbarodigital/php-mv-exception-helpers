@@ -141,12 +141,14 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
                 'line' => __LINE__,
                 'function' => "testFunction",
                 'class' => null,
+                'type' => '->'
             ],
             [
                 'file' => __FILE__,
                 'line' => __LINE__,
                 'function' => "testFunction",
                 'class' => null,
+                'type' => '::',
             ],
             [
                 'file' => __FILE__,
@@ -167,6 +169,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
             'line' => $backtrace[0]['line'],
             'class' => $backtrace[1]['class'],
             'function' => $backtrace[1]['function'],
+            'type' => $backtrace[1]['type'],
             'stackIndex' => 1,
         ];
 

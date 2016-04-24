@@ -93,7 +93,7 @@ class FilterCodeCaller
         $frame = FilterBacktrace::from($backtrace, $partialsToFilterOut);
 
         // convert the stack frame into something that's easier to use
-        $retval = new CodeCaller($frame['class'], $frame['function'], $frame['file'], $frame['line']);
+        $retval = new CodeCaller($frame['class'], $frame['function'], $frame['type'], $frame['file'], $frame['line']);
 
         // all done
         return $retval;

@@ -62,7 +62,7 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller(null, null, null, null);
+        $unit = new CodeCaller(null, null, null, null, null);
 
         // ----------------------------------------------------------------
         // test the results
@@ -81,13 +81,14 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = __CLASS__;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualClass = $unit->getClass();
 
         // ----------------------------------------------------------------
@@ -107,19 +108,47 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = __CLASS__;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualMethod = $unit->getMethod();
 
         // ----------------------------------------------------------------
         // test the results
 
         $this->assertEquals($expectedMethod, $actualMethod);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getCallType
+     */
+    public function testStoresCallTypeIfProvided()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedClass = __CLASS__;
+        $expectedMethod = __METHOD__;
+        $expectedType = '->';
+        $expectedFile = __FILE__;
+        $expectedLine = __LINE__;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
+        $actualType = $unit->getCallType();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedType, $actualType);
     }
 
     /**
@@ -133,13 +162,14 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = __CLASS__;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualFile = $unit->getFilename();
 
         // ----------------------------------------------------------------
@@ -159,13 +189,14 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = __CLASS__;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualLine = $unit->getLine();
 
         // ----------------------------------------------------------------
@@ -185,13 +216,14 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = null;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualMethod = $unit->getMethod();
 
         // ----------------------------------------------------------------
@@ -211,13 +243,14 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = null;
         $expectedMethod = __METHOD__;
+        $expectedType = '->';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine);
         $actualMethod = $unit->getFunction();
 
         // ----------------------------------------------------------------
@@ -237,6 +270,7 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
         $expectedClass = null;
         $expectedMethod = __METHOD__;
+        $expectedType = '::';
         $expectedFile = __FILE__;
         $expectedLine = __LINE__;
         $expectedStack = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
@@ -244,7 +278,7 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedFile, $expectedLine, $expectedStack);
+        $unit = new CodeCaller($expectedClass, $expectedMethod, $expectedType, $expectedFile, $expectedLine, $expectedStack);
         $actualStack = $unit->getStack();
 
         // ----------------------------------------------------------------
@@ -255,19 +289,20 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::getCaller
+     * @covers ::__toString
      * @dataProvider provideDetails
      */
-    public function testCallGetCallerAsString($class, $method, $file, $line, $expectedCaller)
+    public function testCallGetCallerAsString($class, $method, $type, $file, $line, $expectedCaller)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $unit = new CodeCaller($class, $method, $file, $line, $expectedCaller);
+        $unit = new CodeCaller($class, $method, $type, $file, $line, $expectedCaller);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualCaller = $unit->getCaller();
+        $actualCaller = (string)$unit;
 
         // ----------------------------------------------------------------
         // test the results
@@ -278,9 +313,9 @@ class CodeCallerTest extends PHPUnit_Framework_TestCase
     public function provideDetails()
     {
         return [
-            [ __CLASS__, __METHOD__, __FILE__, __LINE__, __CLASS__ . '::' . __METHOD__ . '()@' . __LINE__ ],
-            [ null, __METHOD__, __FILE__, __LINE__,  __METHOD__ . '()@' . __LINE__ ],
-            [ null, null, __FILE__, __LINE__, __FILE__ . '@' . __LINE__ ],
+            [ __CLASS__, __METHOD__, '->', __FILE__, __LINE__, __CLASS__ . '->' . __METHOD__ . '()@' . __LINE__ ],
+            [ null, __METHOD__, '::', __FILE__, __LINE__,  __METHOD__ . '()@' . __LINE__ ],
+            [ null, null, null, __FILE__, __LINE__, __FILE__ . '@' . __LINE__ ],
         ];
     }
 }

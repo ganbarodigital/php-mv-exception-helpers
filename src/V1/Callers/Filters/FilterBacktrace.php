@@ -163,6 +163,7 @@ class FilterBacktrace
         $retval = [
             'class' => null,
             'function' => null,
+            'type' => null,
             'file' => null,
             'line' => null,
             'stackIndex' => $stackIndex,
@@ -171,6 +172,7 @@ class FilterBacktrace
         $frame1Details = [
             'class' => null,
             'function' => null,
+            'type' => null,
         ];
 
         $frame2Details = [
