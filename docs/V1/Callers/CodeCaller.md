@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: callers
-pageflow_prev_url: index.html
-pageflow_prev_text: Callers
+pageflow_prev_url: HowThePhpStackFrameWorks.html
+pageflow_prev_text: How The PHP Stack Frame Works
 pageflow_next_url: FilterBacktrace.html
 pageflow_next_text: FilterBacktrace class
 ---
