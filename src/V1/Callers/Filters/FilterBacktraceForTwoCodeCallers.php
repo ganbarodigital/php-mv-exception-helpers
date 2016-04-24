@@ -80,7 +80,7 @@ class FilterBacktraceForTwoCodeCallers
     {
         // get the call stack frame that we want to return
         $frame1 = FilterBacktrace::from($backtrace, $partialsToFilterOut);
-        $frame2 = FilterBacktrace::from($backtrace, $partialsToFilterOut, $frame1['stackIndex']);
+        $frame2 = FilterBacktrace::from($backtrace, $partialsToFilterOut, $frame1['stackIndex'] + 1);
 
         // convert the stack frame into something that's easier to use
         $retval = [
