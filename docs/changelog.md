@@ -10,9 +10,12 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+## v1.20160402403
+
 ### Fixes
 
 * Fixed `FilterBacktrace` to deal with the way that the PHP call stack splits data across two stack frames
+* Added documentation explaining the PHP call stack data structure
 
 ## v1.2016042402
 
