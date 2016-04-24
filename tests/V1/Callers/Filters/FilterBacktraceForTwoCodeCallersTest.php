@@ -244,7 +244,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         $expectedClass[0] = 'PHPUnit_Framework_TestCase';
         $expectedMethod[0] = 'runTest';
         $expectedClass[1] = 'PHPUnit_Framework_TestCase';
-        $expectedMethod[1] = 'runTest';
+        $expectedMethod[1] = 'runBare';
 
         // ----------------------------------------------------------------
         // perform the change
