@@ -10,6 +10,12 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016042404
+
+Released Sun 24th April 2016.
+
 ### New
 
 * Added `CodeCaller::__toString()` as an alias for `CodeCaller::getCaller()`
