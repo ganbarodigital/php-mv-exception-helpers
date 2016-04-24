@@ -10,6 +10,25 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016042404
+
+Released Sun 24th April 2016.
+
+### New
+
+* Added `CodeCaller::__toString()` as an alias for `CodeCaller::getCaller()`
+
+### Fixes
+
+* Added tracking of caller type to our backtrace analysis
+  - Added new parameter to `CodeCaller::__construct`
+  - Added `CodeCaller::getCallerType()` method
+  - Updated `CodeCaller::getCallerName()` to include the caller type (used to be `::` all the time)
+  - Updated `FilterBacktrace` to return `type` in a stack frame
+  - Updated `FilterBacktraceForTwoCodeCallers` and `FilterCodeCaller` to generate `CodeCaller` values that include the caller type
+
 ## v1.20160402403
 
 ### Fixes

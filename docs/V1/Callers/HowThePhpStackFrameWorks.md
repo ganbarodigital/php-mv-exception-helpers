@@ -167,6 +167,7 @@ line | The line number in 'file' that is being executed
 class | A class that is being called
 function | The method on 'class' that is being called (if 'class' has a value)
 function | A global function that is being called (if 'class' has no value or is not set)
+type | How 'function' was called (`::` for a static call, `->` for a call on an object, not set if 'class' is not set)
 
 At first glance, that looks very straight-forward. Let's isolate a single stack frame:
 
