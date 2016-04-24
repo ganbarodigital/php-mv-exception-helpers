@@ -12,6 +12,15 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016042405
+
+Released Sun 24th April 2016.
+
+### New
+
+* Added base class for when an input parameter has the right type, but an unsupported value
+  - Added `UnsupportedType`
+
 ## v1.2016042404
 
 Released Sun 24th April 2016.
