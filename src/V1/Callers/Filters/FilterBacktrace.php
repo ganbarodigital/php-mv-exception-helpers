@@ -79,10 +79,22 @@ class FilterBacktrace
      */
     public static function from($backtrace, $partialsToFilterOut = [], $index = 0)
     {
+        // we have to start looking one frame after
+        //
+        // this is because the data we're trying to assemble is split across
+        // two stack frames
+        $index++;
+
+        // make sure we're not trying to look beyond the end of the stack trace
         $maxIndex = count($backtrace) - 1;
+        $prevIndex = max(0, $maxIndex - 1);
         if ($index > $maxIndex) {
-            return self::extractFrameDetails($backtrace[$maxIndex], $maxIndex);
+            return self::extractFrameDetails($backtrace[$maxIndex], $backtrace[$prevIndex], $maxIndex);
         }
+
+        // PHP's stack trace is a little esoteric. To find all the details about
+        // a caller, we have to combine information from two stack frames.
+        $prevFrame = $backtrace[$index - 1];
 
         // find the first backtrace entry that passes our filters
         for ($i = $index; $i <= $maxIndex; $i++) {
@@ -91,17 +103,19 @@ class FilterBacktrace
 
             if (!isset($frame['class'])) {
                 // called from global function
-                return self::extractFrameDetails($frame, $i);
+                return self::extractFrameDetails($frame, $prevFrame, $i);
             }
 
             // do we want to skip over this class name?
             if (self::isClassNameOkay($frame['class'], $partialsToFilterOut)) {
-                return self::extractFrameDetails($frame, $i);
+                return self::extractFrameDetails($frame, $prevFrame, $i);
             }
+
+            $prevFrame = $frame;
         }
 
         // if we get here, then we have run out of places to look
-        return self::extractFrameDetails($backtrace[0], 0);
+        return self::extractFrameDetails($backtrace[1], $backtrace[0], 1);
     }
 
     /**
@@ -137,14 +151,14 @@ class FilterBacktrace
      * guarantees that the return value contains all four keys, even if they
      * are missing from the stack frame
      *
-     * @param  array $frame
+     * @param  array $frame1
      *         a stack frame from `debug_backtrace`
      * @param  int $stackIndex
      *         which part of the stack is $frame from?
      * @return array
      *         contains class, function, file, and line
      */
-    private static function extractFrameDetails($frame, $stackIndex)
+    private static function extractFrameDetails($frame1, $frame2, $stackIndex)
     {
         $retval = [
             'class' => null,
@@ -154,9 +168,20 @@ class FilterBacktrace
             'stackIndex' => $stackIndex,
         ];
 
+        $frame1Details = [
+            'class' => null,
+            'function' => null,
+        ];
+
+        $frame2Details = [
+            'file' => null,
+            'line' => null,
+        ];
+
         // we only want entries from the $frame array that we intend to return
-        $parts = array_intersect_key($frame, $retval);
-        $retval = array_merge($retval, $parts);
+        $parts1 = array_intersect_key($frame1, $frame1Details);
+        $parts2 = array_intersect_key($frame2, $frame2Details);
+        $retval = array_merge($retval, $parts1, $parts2);
 
         // all done
         return $retval;

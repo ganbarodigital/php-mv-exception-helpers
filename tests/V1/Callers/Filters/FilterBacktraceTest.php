@@ -94,9 +94,9 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('function', $result);
-        $this->assertEquals(__FUNCTION__, $result['function']);
+        $this->assertEquals('invokeArgs', $result['function']);
         $this->assertArrayHasKey('class', $result);
-        $this->assertEquals(__CLASS__, $result['class']);
+        $this->assertEquals('ReflectionMethod', $result['class']);
     }
 
     /**
@@ -121,9 +121,9 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('function', $result);
-        $this->assertEquals(__FUNCTION__, $result['function']);
+        $this->assertEquals('invokeArgs', $result['function']);
         $this->assertArrayHasKey('class', $result);
-        $this->assertEquals(__CLASS__, $result['class']);
+        $this->assertEquals('ReflectionMethod', $result['class']);
     }
 
     /**
@@ -135,16 +135,19 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedFrame = [
-            'file' => __FILE__,
-            'line' => __LINE__,
-            'function' => "testFunction",
-            'class' => null,
-            'stackIndex' => 0,
-        ];
-
         $backtrace = [
-            $expectedFrame,
+            [
+                'file' => __FILE__,
+                'line' => __LINE__,
+                'function' => "testFunction",
+                'class' => null,
+            ],
+            [
+                'file' => __FILE__,
+                'line' => __LINE__,
+                'function' => "testFunction",
+                'class' => null,
+            ],
             [
                 'file' => __FILE__,
                 'line' => __LINE__,
@@ -157,6 +160,14 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
                 'function' => __FUNCTION__,
                 'class' => __CLASS__,
             ]
+        ];
+
+        $expectedFrame = [
+            'file' => $backtrace[0]['file'],
+            'line' => $backtrace[0]['line'],
+            'class' => $backtrace[1]['class'],
+            'function' => $backtrace[1]['function'],
+            'stackIndex' => 1,
         ];
 
         // ----------------------------------------------------------------
@@ -219,8 +230,8 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
             'PHPUnit_TextUI_Command',
         ];
 
-        $expectedClass = __CLASS__;
-        $expectedMethod = __FUNCTION__;
+        $expectedClass = 'ReflectionMethod';
+        $expectedMethod = 'invokeArgs';
 
         // ----------------------------------------------------------------
         // perform the change
@@ -246,8 +257,8 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
         $partials = [];
 
-        $expectedClass = "ReflectionMethod";
-        $expectedMethod = "invokeArgs";
+        $expectedClass = "PHPUnit_Framework_TestCase";
+        $expectedMethod = "runTest";
 
         // ----------------------------------------------------------------
         // perform the change

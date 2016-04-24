@@ -92,8 +92,8 @@ class FilterCodeCallerTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(CodeCaller::class, $result);
-        $this->assertEquals(__CLASS__, $result->getClass());
-        $this->assertEquals(__FUNCTION__, $result->getMethod());
+        $this->assertEquals('ReflectionMethod', $result->getClass());
+        $this->assertEquals('invokeArgs', $result->getMethod());
     }
 
     /**
@@ -115,8 +115,8 @@ class FilterCodeCallerTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(CodeCaller::class, $result);
-        $this->assertEquals(__CLASS__, $result->getClass());
-        $this->assertEquals(__FUNCTION__, $result->getMethod());
+        $this->assertEquals('ReflectionMethod', $result->getClass());
+        $this->assertEquals('invokeArgs', $result->getMethod());
     }
 
     /**
@@ -131,7 +131,14 @@ class FilterCodeCallerTest extends PHPUnit_Framework_TestCase
             [
                 'file' => __FILE__,
                 'line' => __LINE__,
+                'function' => "testFunction2",
+                'class' => null,
+            ],
+            [
+                'file' => __FILE__,
+                'line' => __LINE__,
                 'function' => "testFunction",
+                'class' => null,
             ],
             [
                 'file' => __FILE__,
@@ -158,7 +165,7 @@ class FilterCodeCallerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CodeCaller::class, $result);
         $this->assertEquals($backtrace[0]['file'], $result->getFilename());
         $this->assertEquals($backtrace[0]['line'], $result->getLine());
-        $this->assertEquals($backtrace[0]['function'], $result->getFunction());
+        $this->assertEquals($backtrace[1]['function'], $result->getFunction());
     }
 
     /**
@@ -210,8 +217,8 @@ class FilterCodeCallerTest extends PHPUnit_Framework_TestCase
             'PHPUnit_TextUI_Command',
         ];
 
-        $expectedClass = __CLASS__;
-        $expectedMethod = __FUNCTION__;
+        $expectedClass = 'ReflectionMethod';
+        $expectedMethod = 'invokeArgs';
 
         // ----------------------------------------------------------------
         // perform the change

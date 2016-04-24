@@ -157,7 +157,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         $name = "\$alfred";
         $unit = UnsupportedType::newFromVar($data, $name);
 
-        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\BaseExceptions\UnsupportedTypeTest::testExceptionMessageContainsFieldAndUnsupportedType(): '\$alfred' cannot be type 'NULL'";
+        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\BaseExceptions\UnsupportedTypeTest::testExceptionMessageContainsFieldAndUnsupportedType()@158: '\$alfred' cannot be type 'NULL'";
 
         // ----------------------------------------------------------------
         // perform the change
