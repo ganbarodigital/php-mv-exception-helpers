@@ -10,6 +10,12 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016042402
+
+Released Sun 24th April 2016.
+
 ### Fixes
 
 * Fixed `FilterBacktraceForTwoCodeCallers` to look for the second caller after the stack frame that contains the first caller
