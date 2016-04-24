@@ -43,13 +43,14 @@
 
 namespace GanbaroDigitalTest\ExceptionHelpers\V1\Callers\Filters;
 
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 use PHPUnit_Framework_TestCase;
 
 /**
- * @coversDefaultClass GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace
+ * @coversDefaultClass GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers
  */
-class FilterBacktraceTest extends PHPUnit_Framework_TestCase
+class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @coversNothing
@@ -62,26 +63,24 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new FilterBacktrace;
+        $unit = new FilterBacktraceForTwoCodeCallers;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(FilterBacktrace::class, $unit);
+        $this->assertInstanceOf(FilterBacktraceForTwoCodeCallers::class, $unit);
     }
 
     /**
      * @covers ::__invoke
      * @covers ::from
-     * @covers ::isClassNameOkay
-     * @covers ::extractFrameDetails
      */
     public function testCanUseAsObject()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $unit = new FilterBacktrace;
+        $unit = new FilterBacktraceForTwoCodeCallers;
         $backtrace = debug_backtrace();
 
         // ----------------------------------------------------------------
@@ -92,17 +91,13 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('function', $result);
-        $this->assertEquals(__FUNCTION__, $result['function']);
-        $this->assertArrayHasKey('class', $result);
-        $this->assertEquals(__CLASS__, $result['class']);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals(__CLASS__, $result[0]->getClass());
+        $this->assertEquals(__FUNCTION__, $result[0]->getMethod());
     }
 
     /**
      * @covers ::from
-     * @covers ::isClassNameOkay
-     * @covers ::extractFrameDetails
      */
     public function testCanCallStatically()
     {
@@ -114,37 +109,30 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $result = FilterBacktrace::from($backtrace);
+        $result = FilterBacktraceForTwoCodeCallers::from($backtrace);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('function', $result);
-        $this->assertEquals(__FUNCTION__, $result['function']);
-        $this->assertArrayHasKey('class', $result);
-        $this->assertEquals(__CLASS__, $result['class']);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals(__CLASS__, $result[0]->getClass());
+        $this->assertEquals(__FUNCTION__, $result[0]->getMethod());
     }
 
     /**
      * @covers ::from
-     * @covers ::extractFrameDetails
      */
     public function testWillReturnGlobalFunctions()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedFrame = [
-            'file' => __FILE__,
-            'line' => __LINE__,
-            'function' => "testFunction",
-            'class' => null,
-            'stackIndex' => 0,
-        ];
-
         $backtrace = [
-            $expectedFrame,
+            [
+                'file' => __FILE__,
+                'line' => __LINE__,
+                'function' => "testFunction",
+            ],
             [
                 'file' => __FILE__,
                 'line' => __LINE__,
@@ -162,16 +150,19 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualFrame = FilterBacktrace::from($backtrace);
+        $result = FilterBacktraceForTwoCodeCallers::from($backtrace);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedFrame, $actualFrame);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals($backtrace[0]['file'], $result[0]->getFilename());
+        $this->assertEquals($backtrace[0]['line'], $result[0]->getLine());
+        $this->assertEquals($backtrace[0]['function'], $result[0]->getFunction());
     }
 
     /**
-     * @covers ::isClassNameOkay
+     * @covers ::from
      */
     public function testWillFilterOutNamespaces()
     {
@@ -190,18 +181,18 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualFrame = FilterBacktrace::from($backtrace, $partials);
+        $result = FilterBacktraceForTwoCodeCallers::from($backtrace, $partials);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedClass, $actualFrame['class']);
-        $this->assertEquals($expectedMethod, $actualFrame['function']);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals($expectedClass, $result[0]->getClass());
+        $this->assertEquals($expectedMethod, $result[0]->getMethod());
     }
 
     /**
      * @covers ::from
-     * @covers ::extractFrameDetails
      */
     public function testReturnsFirstStackFrameWhenEverythingElseFilteredOut()
     {
@@ -225,67 +216,49 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualFrame = FilterBacktrace::from($backtrace, $partials);
+        $result = FilterBacktraceForTwoCodeCallers::from($backtrace, $partials);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedClass, $actualFrame['class']);
-        $this->assertEquals($expectedMethod, $actualFrame['function']);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals($expectedClass, $result[0]->getClass());
+        $this->assertEquals($expectedMethod, $result[0]->getMethod());
     }
 
     /**
      * @covers ::from
-     * @covers ::extractFrameDetails
      */
-    public function testCanSearchFromAnywhereInTheStack()
+    public function testReturnsTwoStackFrames()
     {
         // ----------------------------------------------------------------
         // setup your test
 
         $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
-        $partials = [];
+        $partials = [
+            __CLASS__,
+            'ReflectionMethod',
+        ];
 
-        $expectedClass = "ReflectionMethod";
-        $expectedMethod = "invokeArgs";
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $actualFrame = FilterBacktrace::from($backtrace, $partials, 1);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedClass, $actualFrame['class']);
-        $this->assertEquals($expectedMethod, $actualFrame['function']);
-    }
-
-    /**
-     * @covers ::from
-     * @covers ::extractFrameDetails
-     */
-    public function testReturnsLastStackFrameWhenStartingSearchBeyondTheStack()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
-        $partials = [];
-
-        $expectedClass = "PHPUnit_TextUI_Command";
-        $expectedMethod = "main";
+        $expectedClass = $expectedMethod = [];
+        $expectedClass[0] = 'PHPUnit_Framework_TestCase';
+        $expectedMethod[0] = 'runTest';
+        $expectedClass[1] = 'PHPUnit_Framework_TestCase';
+        $expectedMethod[1] = 'runTest';
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualFrame = FilterBacktrace::from($backtrace, $partials, 300);
+        $result = FilterBacktraceForTwoCodeCallers::from($backtrace, $partials);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedClass, $actualFrame['class']);
-        $this->assertEquals($expectedMethod, $actualFrame['function']);
+        $this->assertInstanceOf(CodeCaller::class, $result[0]);
+        $this->assertEquals($expectedClass[0], $result[0]->getClass());
+        $this->assertEquals($expectedMethod[0], $result[0]->getMethod());
+        $this->assertInstanceOf(CodeCaller::class, $result[1]);
+        $this->assertEquals($expectedClass[1], $result[1]->getClass());
+        $this->assertEquals($expectedMethod[1], $result[1]->getMethod());
     }
-
 }

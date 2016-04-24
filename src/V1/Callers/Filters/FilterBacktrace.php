@@ -57,11 +57,13 @@ class FilterBacktrace
      *         the debug_backtrace() return value
      * @param  array $partialsToFilterOut
      *         a list of partial namespaces to skip over
+     * @param  int $index
+     *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [])
+    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 0)
     {
-        return self::from($backtrace, $partialsToFilterOut);
+        return self::from($backtrace, $partialsToFilterOut, $index);
     }
 
     /**
@@ -71,25 +73,35 @@ class FilterBacktrace
      *         the debug_backtrace() return value
      * @param  array $partialsToFilterOut
      *         a list of partial namespaces to skip over
+     * @param  int $index
+     *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = [])
+    public static function from($backtrace, $partialsToFilterOut = [], $index = 0)
     {
+        $maxIndex = count($backtrace) - 1;
+        if ($index > $maxIndex) {
+            return self::extractFrameDetails($backtrace[$maxIndex], $maxIndex);
+        }
+
         // find the first backtrace entry that passes our filters
-        foreach ($backtrace as $frame) {
+        for ($i = $index; $i <= $maxIndex; $i++) {
+            // what are we looking at?
+            $frame = $backtrace[$i];
+
             if (!isset($frame['class'])) {
                 // called from global function
-                return self::extractFrameDetails($frame);
+                return self::extractFrameDetails($frame, $i);
             }
 
             // do we want to skip over this class name?
             if (self::isClassNameOkay($frame['class'], $partialsToFilterOut)) {
-                return self::extractFrameDetails($frame);
+                return self::extractFrameDetails($frame, $i);
             }
         }
 
         // if we get here, then we have run out of places to look
-        return self::extractFrameDetails($backtrace[0]);
+        return self::extractFrameDetails($backtrace[0], 0);
     }
 
     /**
@@ -127,16 +139,19 @@ class FilterBacktrace
      *
      * @param  array $frame
      *         a stack frame from `debug_backtrace`
+     * @param  int $stackIndex
+     *         which part of the stack is $frame from?
      * @return array
      *         contains class, function, file, and line
      */
-    private static function extractFrameDetails($frame)
+    private static function extractFrameDetails($frame, $stackIndex)
     {
         $retval = [
             'class' => null,
             'function' => null,
             'file' => null,
             'line' => null,
+            'stackIndex' => $stackIndex,
         ];
 
         // we only want entries from the $frame array that we intend to return
