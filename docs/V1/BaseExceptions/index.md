@@ -18,5 +18,6 @@ Class | Description
 ------|------------
 [`ParameterisedException`](ParameterisedException.html) | exception message is build from a data array
 [`UnsupportedType`](UnsupportedType.html) | thrown when a PHP variable has the wrong data type
+[`UnsupportedValue`](UnsupportedValue.html) | thrown when a PHP variable has a value we cannot accept as input
 
 Click on the name of an exception to see full details.

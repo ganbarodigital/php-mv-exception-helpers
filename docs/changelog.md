@@ -10,7 +10,10 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### New
+
+* Added base class for when an input parameter has the right type, but an unsupported value
+  - Added `UnsupportedType`
 
 ## v1.2016042404
 
