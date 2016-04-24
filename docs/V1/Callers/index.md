@@ -18,6 +18,7 @@ Class | Description
 ------|------------
 [`CodeCaller`](CodeCaller.html) | value object representing the code that has called our code
 [`FilterBacktrace`](FilterBacktrace.html) | find the first item in a backtrace that isn't in the filter list
+[`FilterBacktraceForTwoCodeCallers`](FilterBacktraceForTwoCodeCallers.html) | find out who called us, and who called them
 [`FilterCodeCaller`](FilterCodeCaller.html) | wrapper around `FilterBacktrace` that returns a `CodeCaller` value object.
 
 Click on the name of a class to see full details.
