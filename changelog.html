@@ -73,7 +73,57 @@
             <article>
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
+<p>Nothing yet.</p>
+<h2 id="v12016042405">v1.2016042405</h2>
+<p>Released Sun 24th April 2016.</p>
+<h3 id="new">New</h3>
+<ul>
+<li>Added base class for when an input parameter has the right type, but an unsupported value
+<ul>
+<li>Added <code>UnsupportedType</code></li>
+</ul></li>
+</ul>
+<h2 id="v12016042404">v1.2016042404</h2>
+<p>Released Sun 24th April 2016.</p>
+<h3 id="new-1">New</h3>
+<ul>
+<li>Added <code>CodeCaller::__toString()</code> as an alias for <code>CodeCaller::getCaller()</code></li>
+</ul>
+<h3 id="fixes">Fixes</h3>
+<ul>
+<li>Added tracking of caller type to our backtrace analysis
+<ul>
+<li>Added new parameter to <code>CodeCaller::__construct</code></li>
+<li>Added <code>CodeCaller::getCallerType()</code> method</li>
+<li>Updated <code>CodeCaller::getCallerName()</code> to include the caller type (used to be <code>::</code> all the time)</li>
+<li>Updated <code>FilterBacktrace</code> to return <code>type</code> in a stack frame</li>
+<li>Updated <code>FilterBacktraceForTwoCodeCallers</code> and <code>FilterCodeCaller</code> to generate <code>CodeCaller</code> values that include the caller type</li>
+</ul></li>
+</ul>
+<h2 id="v120160402403">v1.20160402403</h2>
+<h3 id="fixes-1">Fixes</h3>
+<ul>
+<li>Fixed <code>FilterBacktrace</code> to deal with the way that the PHP call stack splits data across two stack frames</li>
+<li>Added documentation explaining the PHP call stack data structure</li>
+</ul>
+<h2 id="v12016042402">v1.2016042402</h2>
+<p>Released Sun 24th April 2016.</p>
+<h3 id="fixes-2">Fixes</h3>
+<ul>
+<li>Fixed <code>FilterBacktraceForTwoCodeCallers</code> to look for the second caller after the stack frame that contains the first caller</li>
+</ul>
+<h2 id="v12016042401">v1.2016042401</h2>
+<p>Released Sun 24th April 2016.</p>
+<h3 id="new-2">New</h3>
+<ul>
+<li>Added support for searching a stack trace multiple times
+<ul>
+<li>added <code>$index</code> parameter to <code>FilterBacktrace</code></li>
+<li>added <code>FilterBacktraceForTwoCodeCallers</code></li>
+</ul></li>
+</ul>
 <h2 id="v12016041901">v1.2016041901</h2>
+<p>Released Tue 19th April 2016.</p>
 <h3 id="docs">Docs</h3>
 <ul>
 <li>Switched to downloading template from Github</li>
@@ -82,7 +132,7 @@
 </ul>
 <h2 id="v12016041701">v1.2016041701</h2>
 <p>Released Sun 17th April 2016.</p>
-<h3 id="new">New</h3>
+<h3 id="new-3">New</h3>
 <ul>
 <li>Added support for exceptions that can remember relevant data
 <ul>

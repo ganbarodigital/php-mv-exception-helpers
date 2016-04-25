@@ -51,14 +51,14 @@
                         <nav class="pageflow">
               <ul>
                                     <li><a href="CodeCaller.html">Prev: CodeCaller class</a></li>
-                                                      <li><a href="FilterCodeCaller.html">Next: FilterCodeCaller class</a></li>
+                                                      <li><a href="FilterBacktraceForTwoCodeCallers.html">Next: FilterBacktraceForTwoCodeCallers class</a></li>
                                 </ul>
             </nav>
             
             <article>
                 <h1 id="filterbacktrace">FilterBacktrace</h1>
 <div class="callout info">
-<p>Since version 2016041701.</p>
+<p>Since v1.2016041701</p>
 </div>
 <h2 id="description">Description</h2>
 <p><code>FilterBacktrace</code> is a data filter. You give it the output from <code>debug_backtrace()</code>, and a list of PHP classnames or partial namespaces to filter, and it will return the first entry in the debug trace that passes the filter.</p>
@@ -76,9 +76,11 @@ class FilterBacktrace
      *         the debug_backtrace() return value
      * @param  array $partialsToFilterOut
      *         a list of partial namespaces to skip over
+     * @param  int $index
+     *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = []);
+    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 0);
 
     /**
      * work out who has called a piece of code
@@ -87,11 +89,14 @@ class FilterBacktrace
      *         the debug_backtrace() return value
      * @param  array $partialsToFilterOut
      *         a list of partial namespaces to skip over
+     * @param  int $index
+     *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = []);
+    public static function from($backtrace, $partialsToFilterOut = [], $index = 0);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
+<h3 id="finding-a-single-stack-frame">Finding A Single Stack Frame</h3>
 <p><code>FilterBacktrace</code> can be used as an object, or as a static class method.</p>
 <pre><code class="language-php">// import first
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
@@ -115,6 +120,19 @@ $caller = $filter($trace, $partials);
 
 // to call statically
 $caller = FilterBacktrace::from($trace, $partials);</code></pre>
+<h3 id="finding-multiple-stack-frames">Finding Multiple Stack Frames</h3>
+<p><code>debug_backtrace()</code> returns the stack trace as an array. You can start the search from anywhere in this array by passing a third parameter into this filter. This is especially useful if your exception wants to know who called the code that is trying to throw an exception:</p>
+<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
+
+// we need a stack trace
+// use DEBUG_BACKTRACE_IGNORE_ARGS to keep the trace very small
+$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+// starts from the beginning of the stack trace
+$caller1 = FilterBacktrace::from($trace);
+// starts from just after where we found $caller1
+$caller2 = FilterBacktrace::from($trace, [], $caller1['stackIndex'] + 1);</code></pre>
+<p>If you attempt to search beyond the end of the stack trace, <code>FilterBacktrace</code> will return the last stack frame.</p>
 <h2 id="return-value">Return Value</h2>
 <p><code>FilterBacktrace</code> returns an array:</p>
 <table>
@@ -141,6 +159,10 @@ $caller = FilterBacktrace::from($trace, $partials);</code></pre>
 <td>line</td>
 <td>The line number in the file where the PHP code was defined, or NULL</td>
 </tr>
+<tr>
+<td>stackIndex</td>
+<td>Where did we find these details in the backtrace array?</td>
+</tr>
 </tbody>
 </table>
 <p>You should expect some of the fields in the return array to be <code>NULL</code>:</p>
@@ -159,7 +181,7 @@ $caller = FilterBacktrace::from($trace, $partials);</code></pre>
                         <nav class="pageflow">
               <ul>
                                     <li><a href="CodeCaller.html">Prev: CodeCaller class</a></li>
-                                                      <li><a href="FilterCodeCaller.html">Next: FilterCodeCaller class</a></li>
+                                                      <li><a href="FilterBacktraceForTwoCodeCallers.html">Next: FilterBacktraceForTwoCodeCallers class</a></li>
                                 </ul>
             </nav>
                     </main>

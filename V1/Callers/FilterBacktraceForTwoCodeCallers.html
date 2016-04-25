@@ -38,11 +38,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -50,78 +50,94 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
-                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
+                                    <li><a href="FilterBacktrace.html">Prev: FilterBacktrace class</a></li>
+                                                      <li><a href="FilterCodeCaller.html">Next: FilterCodeCaller class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="parameterisedexception">ParameterisedException</h1>
+                <h1 id="filterbacktracefortwocodecallers">FilterBacktraceForTwoCodeCallers</h1>
 <div class="callout info">
-<p>Since v1.2016041701</p>
+<p>Since v1.2016042401</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>ParameterisedException</code> is a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
-<pre><code class="language-php">// import
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-
-// inherit from ParameterisedException
-class MyException extends ParameterisedException
-{
-    // we recommend using static factory methods for creating exceptions
-    public static function newFromData($data)
-    {
-        return new static($formatString, $data);
-    }
-}</code></pre>
+<p><code>FilterBacktraceForTwoCodeCallers</code> is a data filter. It is a wrapper around <a href="FilterBacktrace.html"><code>FilterBacktrace</code></a>. It converts <code>FilterBacktrace</code>'s return value into an array of two <a href="CodeCaller.html"><code>CodeCaller</code></a> value objects.</p>
+<p><code>FilterBacktraceForTwoCodeCallers</code> was introduced for use in exception error messages in the <code>ganbarodigital/php-mv-defensive</code> package.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>ParameterisedException</code> has the following public interface:</p>
-<pre><code class="language-php">/**
- * ParameterisedException provides a data-oriented base class for your exceptions
- */
-class ParameterisedException extends RuntimeException
+<p><code>FilterBacktraceForTwoCodeCallers</code> has the following public interface:</p>
+<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+
+class FilterBacktraceForTwoCodeCallers
 {
     /**
-     * our constructor
+     * work out who has called a piece of code, and who (in turn) called that
+     * piece of code too
      *
-     * @param string $formatString
-     *        the sprintf() format string for our human-readable message
-     * @param array $data
-     *        the data required to sprintf() with $formatString
-     * @param int $code
-     *        the error code that you want to set (if any)
-     */
-    public function __construct($formatString, $data = [], $code = 0);
-
-    /**
-     * what was the data that we used to create the printable message?
-     *
+     * @param  array $backtrace
+     *         the debug_backtrace() return value
+     * @param  array $partialsToFilterOut
+     *         a list of partial namespaces to skip over
      * @return array
      */
-    public function getMessageData();
+    public function __invoke($backtrace, $partialsToFilterOut = []);
 
     /**
-     * what was the format string we used to create the printable message?
+     * work out who has called a piece of code, and who (in turn) called that
+     * piece of code too
      *
-     * @return string
+     * @param  array $backtrace
+     *         the debug_backtrace() return value
+     * @param  array $partialsToFilterOut
+     *         a list of partial namespaces to skip over
+     * @return array
      */
-    public function getMessageFormat();
+    public static function from($backtrace, $partialsToFilterOut = []);
 }</code></pre>
-<h2 id="notes">Notes</h2>
-<h3 id="named-parameters-in-the-format-string">Named Parameters In The Format String</h3>
-<p>Internally, <code>ParameterisedException</code> uses <a href="http://ganbarodigital.github.io/php-the-missing-bits/strings/vnsprintf.html"><code>vnsprintf()</code></a> from <em><a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a></em>. This allows you to use <em>named parameters</em> in the format string:</p>
-<pre><code class="language-php">$format = "Value must be between %min\$s and %max\$s inclusively";
-$data = [
-    'min' =&gt; 10,
-    'max' =&gt; 20,
+<h2 id="how-to-use">How To Use</h2>
+<p><code>FilterBacktraceForTwoCodeCallers</code> can be used as an object, or as a static class method.</p>
+<pre><code class="language-php">// import first
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
+
+// we need a stack trace
+// use DEBUG_BACKTRACE_IGNORE_ARGS to keep the trace very small
+$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+// we need a list of namespaces to filter out
+//
+// this can be individual parts of namespaces, or whole classnames
+$partials = [
+    'Checks',
+    'Requirements',
+    FilterBacktraceForTwoCodeCallers::class,
 ];
-throw new ParameterisedException($format, $data);</code></pre>
+
+// to use as an object
+$filter = new FilterBacktraceForTwoCodeCallers;
+$callers = $filter($trace, $partials);
+
+// to call statically
+$callers = FilterBacktraceForTwoCodeCallers::from($trace, $partials);</code></pre>
+<h2 id="return-value">Return Value</h2>
+<p><code>FilterBacktraceForTwoCodeCallers</code> returns an array of <code>CodeCaller</code> value objects.</p>
+<ol>
+<li>The first value object contains details of the code that called you.</li>
+<li>The second value object contains details of the code that called that code.</li>
+</ol>
+<p>This is very useful in exception messages. It allows your exception to state which bit of code is throwing the exception, and which bit of code caused the exception.</p>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="CodeCaller.html"><code>CodeCaller</code> value object</a></li>
+<li><a href="FilterBacktrace.html"><code>FilterBacktrace</code> class</a></li>
+</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
-                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
+                                    <li><a href="FilterBacktrace.html">Prev: FilterBacktrace class</a></li>
+                                                      <li><a href="FilterCodeCaller.html">Next: FilterCodeCaller class</a></li>
                                 </ul>
             </nav>
                     </main>

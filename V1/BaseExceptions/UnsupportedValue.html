@@ -50,78 +50,77 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
-                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
+                                    <li><a href="UnsupportedType.html">Prev: UnsupportedType class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="parameterisedexception">ParameterisedException</h1>
-<div class="callout info">
-<p>Since v1.2016041701</p>
+                <h1 id="unsupportedtype">UnsupportedType</h1>
+<div class="callout warning">
+<p>Not yet in a tagged release</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>ParameterisedException</code> is a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
-<pre><code class="language-php">// import
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-
-// inherit from ParameterisedException
-class MyException extends ParameterisedException
-{
-    // we recommend using static factory methods for creating exceptions
-    public static function newFromData($data)
-    {
-        return new static($formatString, $data);
-    }
-}</code></pre>
+<p><code>UnsupportedValue</code> is an exception thrown when a function or method is passed a parameter, and the parameter's value is not supported by the function or method.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>ParameterisedException</code> has the following public interface:</p>
-<pre><code class="language-php">/**
- * ParameterisedException provides a data-oriented base class for your exceptions
- */
-class ParameterisedException extends RuntimeException
+<p><code>UnsupportedValue</code> has the following public interface:</p>
+<pre><code class="language-php">// our base class and interface(s)
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+
+// return types from our method(s)
+use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
+
+// how to import
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue;
+
+// public interface
+class UnsupportedValue extends ParameterisedException implements HttpStatusProvider
 {
     /**
-     * our constructor
+     * create a new exception
      *
-     * @param string $formatString
-     *        the sprintf() format string for our human-readable message
-     * @param array $data
-     *        the data required to sprintf() with $formatString
-     * @param int $code
-     *        the error code that you want to set (if any)
+     * @param  mixed $var
+     *         the variable that has the unsupported value
+     * @param  string $fieldOrVarName
+     *         the name of the input field, PHP variable or function/method
+     *         parameter that contains $data
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final exception message?
+     * @param  array|null $callerFilter
+     *         are there any namespaces we want to filter out of the call stack?
+     * @return UnsupportedValue
+     *         an fully-built exception for you to throw
      */
-    public function __construct($formatString, $data = [], $code = 0);
+    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
 
     /**
-     * what was the data that we used to create the printable message?
-     *
-     * @return array
+     * which HTTP status code do we map onto?
+     * @return UnprocessableEntityStatusProvider
      */
-    public function getMessageData();
-
-    /**
-     * what was the format string we used to create the printable message?
-     *
-     * @return string
-     */
-    public function getMessageFormat();
-}</code></pre>
+    public function getHttpStatus();
+}
+</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<p>You can use this exception class in one of two ways:</p>
+<ul>
+<li>throw new instances of it, or</li>
+<li>create your own <code>UnsupportedValue</code> subclass in your own library, and throw those</li>
+</ul>
+<p>We recommend the second approach. It allows you to ensure that all of your library's exceptions have a common base class / interface. This can make <code>try/catch</code> blocks easier to write.</p>
 <h2 id="notes">Notes</h2>
-<h3 id="named-parameters-in-the-format-string">Named Parameters In The Format String</h3>
-<p>Internally, <code>ParameterisedException</code> uses <a href="http://ganbarodigital.github.io/php-the-missing-bits/strings/vnsprintf.html"><code>vnsprintf()</code></a> from <em><a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a></em>. This allows you to use <em>named parameters</em> in the format string:</p>
-<pre><code class="language-php">$format = "Value must be between %min\$s and %max\$s inclusively";
-$data = [
-    'min' =&gt; 10,
-    'max' =&gt; 20,
-];
-throw new ParameterisedException($format, $data);</code></pre>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
+<li><a href="http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html"><code>HttpStatusProvider</code> interface</a></li>
+</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: BaseExceptions</a></li>
-                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
+                                    <li><a href="UnsupportedType.html">Prev: UnsupportedType class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>
