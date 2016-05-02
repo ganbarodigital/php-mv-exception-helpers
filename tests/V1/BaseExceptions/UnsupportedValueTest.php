@@ -46,8 +46,8 @@ namespace GanbaroDigitalTest\ExceptionHelpers\V1\BaseExceptions;
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
-use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
+use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
 
@@ -103,7 +103,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::newFromVar
      */
-    public function testIsHttpStatusProvider()
+    public function testIsHttpRuntimeErrorException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -119,13 +119,13 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(HttpStatusProvider::class, $unit);
+        $this->assertInstanceOf(HttpRuntimeErrorException::class, $unit);
     }
 
     /**
      * @covers ::getHttpStatus
      */
-    public function testMapsToHttpStatus422()
+    public function testMapsToHttpStatus500()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -142,7 +142,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(UnprocessableEntityStatus::class, $httpStatus);
+        $this->assertInstanceOf(UnexpectedErrorStatus::class, $httpStatus);
     }
 
     /**
