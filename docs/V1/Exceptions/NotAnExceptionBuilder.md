@@ -1,13 +1,11 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: index.html
-pageflow_prev_text: Exceptions List
-pageflow_next_url: NotAnExceptionBudiler.html
-pageflow_next_text: NotAnExceptionBuidler class
+pageflow_prev_url: NoBuilderForException.html
+pageflow_prev_text: NoBuilderForException class
 ---
 
-# NoBuilderForException
+# NotAnExceptionBuilder
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,14 +13,14 @@ Not yet in a tagged release
 
 ## Description
 
-`NoBuilderForException` is an exception. It is thrown when we do not know how to build an exception.
+`NotAnExceptionBuilder` is an exception. It is thrown when we have been given an exception builder that we cannot use.
 
 ## Public Interface
 
-`NoBuilderForException` has the following public interface:
+`NotAnExceptionBuilder` has the following public interface:
 
 ```php
-// NoBuilderForException lives in this namespace
+// NotAnExceptionBuilder lives in this namespace
 namespace GanbaroDigital\ExceptionHelpers\V1\Exceptions;
 
 // our base classes and interfaces
@@ -33,7 +31,7 @@ use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 // return type(s) for our methods
 use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 
-class NoBuilderForException
+class NotAnExceptionBuilder
   extends ParameterisedException
   implements ExceptionHelpersException, HttpRuntimeErrorException
 {
@@ -43,14 +41,18 @@ class NoBuilderForException
     /**
      * create a new exception
      *
-     * @param  mixed $exceptionName
-     *         the name of the exception that we could not find
+     * @param  string $alias
+     *         the exception that the bad builder is for
+     * @param  mixed $badBuilder
+     *         the non-callable that we were given
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final exception message?
      * @param  array|null $callerFilter
      *         are there any namespaces we want to filter out of the call stack?
-     * @return NoBuilderForException
+     * @return UnsupportedValue
      *         an fully-built exception for you to throw
      */
-    public static function newFromExceptionName($exceptionName, $callerFilter = null);
+    public static function newFromNonCallable($alias, $badBuilder, $typeFlags = null, $callerFilter = null);
 
     /**
      * what was the data that we used to create the printable message?
@@ -162,16 +164,17 @@ catch(RuntimeException $e) {
 
 Here is the contract for this class:
 
-    GanbaroDigital\ExceptionHelpers\V1\Exceptions\NoBuilderForException
+    GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NotAnExceptionBuilder
      [x] Can instantiate
      [x] Is exception helpers exception
      [x] Is parameterised exception
      [x] Is runtime exception
      [x] Is http runtime error exception
      [x] Maps to unexpected error status
-     [x] Can build from exception name
-     [x] Can pass caller filter into build from exception name
-     [x] Build from exception name will use default caller filter if no filter provided
+     [x] Can build from bad exception builders
+     [x] Exception message contains caller
+     [x] Exception message contains exception alias
+     [x] Exception message contains type of bad builder
 
  Class contracts are built from this class's unit tests.
 

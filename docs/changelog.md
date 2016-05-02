@@ -14,6 +14,7 @@ pageflow_next_text: Contributing
 
 * Added a dependency injection container for exceptions
   - Added `NoBuilderForException` exception
+  - Added `NotAnExceptionBuilder` exception
 
 ## v1.2016050201
 
