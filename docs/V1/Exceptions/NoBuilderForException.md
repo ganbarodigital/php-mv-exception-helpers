@@ -162,6 +162,7 @@ Here is the contract for this class:
 
     GanbaroDigital\ExceptionHelpers\V1\Exceptions\NoBuilderForException
      [x] Can instantiate
+     [x] Is exception helpers exception
      [x] Is parameterised exception
      [x] Is runtime exception
      [x] Is http runtime error exception

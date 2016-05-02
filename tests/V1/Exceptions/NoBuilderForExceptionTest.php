@@ -46,6 +46,7 @@ namespace GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions;
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 use GanbaroDigital\ExceptionHelpers\V1\Exceptions\NoBuilderForException;
+use GanbaroDigital\ExceptionHelpers\V1\Exceptions\ExceptionHelpersException;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
@@ -74,6 +75,25 @@ class NoBuilderForExceptionTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(NoBuilderForException::class, $unit);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testIsExceptionHelpersException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new NoBuilderForException(__CLASS__);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(ExceptionHelpersException::class, $unit);
     }
 
     /**
@@ -163,11 +183,11 @@ class NoBuilderForExceptionTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $exceptionName = "TheTroutIsRevolting!";
-        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanBuildFromExceptionName()@178: no builder for exception 'TheTroutIsRevolting!'";
+        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanBuildFromExceptionName()@198: no builder for exception 'TheTroutIsRevolting!'";
         $expectedData = [
             'exceptionName' => $exceptionName,
-            'callerName' => 'GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanBuildFromExceptionName()@178',
-            'caller' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 178),
+            'callerName' => 'GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanBuildFromExceptionName()@198',
+            'caller' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 198),
         ];
 
         // ----------------------------------------------------------------
@@ -196,11 +216,11 @@ class NoBuilderForExceptionTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $exceptionName = "TheTroutIsRevolting!";
-        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanPassCallerFilterIntoBuildFromExceptionName()@211: no builder for exception 'TheTroutIsRevolting!'";
+        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanPassCallerFilterIntoBuildFromExceptionName()@231: no builder for exception 'TheTroutIsRevolting!'";
         $expectedData = [
             'exceptionName' => $exceptionName,
-            'callerName' => 'GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanPassCallerFilterIntoBuildFromExceptionName()@211',
-            'caller' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 211),
+            'callerName' => 'GanbaroDigitalTest\ExceptionHelpers\V1\Exceptions\NoBuilderForExceptionTest->testCanPassCallerFilterIntoBuildFromExceptionName()@231',
+            'caller' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 231),
         ];
 
         // ----------------------------------------------------------------
