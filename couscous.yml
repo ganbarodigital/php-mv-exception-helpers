@@ -65,3 +65,6 @@ menu:
             callers:
                 text: Callers
                 relativeUrl: V1/Callers/index.html
+            exceptions:
+                text: Exceptions
+                relativeUrl: V1/Exceptions/index.html

@@ -7,8 +7,8 @@ pageflow_prev_text: UnsupportedType class
 
 # UnsupportedType
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016042405
 </div>
 
 ## Description
@@ -22,16 +22,18 @@ Not yet in a tagged release
 ```php
 // our base class and interface(s)
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 
 // return types from our method(s)
-use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
+use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 
 // how to import
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue;
 
 // public interface
-class UnsupportedValue extends ParameterisedException implements HttpStatusProvider
+class UnsupportedValue
+  extends ParameterisedException
+  implements HttpRuntimeErrorException
 {
     /**
      * create a new exception
@@ -52,7 +54,7 @@ class UnsupportedValue extends ParameterisedException implements HttpStatusProvi
 
     /**
      * which HTTP status code do we map onto?
-     * @return UnprocessableEntityStatusProvider
+     * @return UnexpectedErrorStatus
      */
     public function getHttpStatus();
 }
@@ -75,4 +77,4 @@ None at this time.
 ## See Also
 
 * [`ParameterisedException` class](ParameterisedException.html)
-* [`HttpStatusProvider` interface](http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html)
+* [`HttpRuntimeErrorException` interface](http://ganbarodigital.github.io/php-http-status/reference/Interfaces/HttpRuntimeErrorException.html)

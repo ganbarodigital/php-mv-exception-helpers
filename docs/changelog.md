@@ -12,6 +12,14 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016050201
+
+Released Mon 2nd May 2016.
+
+### New
+
+* Updated to be compatible with [`ganbarodigital/php-http-status` version 2](https://ganbarodigital.github.io/php-http-status)
+
 ## v1.2016042405
 
 Released Sun 24th April 2016.

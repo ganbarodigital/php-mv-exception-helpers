@@ -44,8 +44,8 @@
 namespace GanbaroDigital\ExceptionHelpers\V1\BaseExceptions;
 
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
-use GanbaroDigital\HttpStatus\StatusProviders\RequestError\UnprocessableEntityStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
+use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
 
 /**
@@ -54,10 +54,10 @@ use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
  *
  * Subclass this exception in your own libraries and applications.
  */
-class UnsupportedType extends ParameterisedException implements HttpStatusProvider
+class UnsupportedType extends ParameterisedException implements HttpRuntimeErrorException
 {
-    // adds 'getHttpStatus()' that returns a HTTP 422 status value object
-    use UnprocessableEntityStatusProvider;
+    // adds 'getHttpStatus()' that returns a HTTP 500 status value object
+    use UnexpectedErrorStatusProvider;
 
     /**
      * create a new exception
