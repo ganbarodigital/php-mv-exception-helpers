@@ -55,7 +55,22 @@ class UnsupportedType
     public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
 
     /**
+     * what was the data that we used to create the printable message?
+     *
+     * @return array
+     */
+    public function getMessageData();
+
+    /**
+     * what was the format string we used to create the printable message?
+     *
+     * @return string
+     */
+    public function getMessageFormat();
+
+    /**
      * which HTTP status code do we map onto?
+     *
      * @return UnexpectedErrorStatus
      */
     public function getHttpStatus();

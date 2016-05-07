@@ -10,11 +10,7 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-### New
-
-* Added a dependency injection container for exceptions
-  - Added `NoBuilderForException` exception
-  - Added `NotAnExceptionBuilder` exception
+Nothing yet.
 
 ## v1.2016050201
 
