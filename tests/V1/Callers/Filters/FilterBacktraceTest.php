@@ -192,7 +192,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [
             __CLASS__,
             'ReflectionMethod'
@@ -222,7 +222,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [
             __CLASS__,
             'ReflectionMethod',
@@ -257,7 +257,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [];
 
         $expectedClass = "PHPUnit_Framework_TestCase";
@@ -284,7 +284,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [];
 
         $expectedClass = "PHPUnit_TextUI_Command";
