@@ -82,7 +82,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $unit = new FilterBacktrace;
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         // ----------------------------------------------------------------
         // perform the change
@@ -109,7 +109,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         // ----------------------------------------------------------------
         // perform the change
