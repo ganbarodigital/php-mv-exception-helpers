@@ -135,34 +135,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = [
-            [
-                'file' => __FILE__,
-                'line' => __LINE__,
-                'function' => "testFunction",
-                'class' => null,
-                'type' => '->'
-            ],
-            [
-                'file' => __FILE__,
-                'line' => __LINE__,
-                'function' => "testFunction",
-                'class' => null,
-                'type' => '::',
-            ],
-            [
-                'file' => __FILE__,
-                'line' => __LINE__,
-                'function' => __FUNCTION__,
-                'class' => __CLASS__,
-            ],
-            [
-                'file' => __FILE__,
-                'line' => __LINE__,
-                'function' => __FUNCTION__,
-                'class' => __CLASS__,
-            ]
-        ];
+        $backtrace = foo();
 
         $expectedFrame = [
             'file' => $backtrace[0]['file'],
@@ -266,7 +239,7 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualFrame = FilterBacktrace::from($backtrace, $partials, 1);
+        $actualFrame = FilterBacktrace::from($backtrace, $partials, 2);
 
         // ----------------------------------------------------------------
         // test the results
@@ -301,5 +274,22 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedClass, $actualFrame['class']);
         $this->assertEquals($expectedMethod, $actualFrame['function']);
     }
+}
 
+// test helpers
+class foo
+{
+    public static function bar()
+    {
+        return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+    }
+}
+function foo()
+{
+    // the PHP debug_backtrace() stack frames are skewed, with some of the
+    // information in one stack frame, and some more of the information in
+    // the next stack frame
+    //
+    // this makes the very first stack frame a tricky thing to deal with
+    return foo::bar();
 }

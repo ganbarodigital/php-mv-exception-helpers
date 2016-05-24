@@ -12,6 +12,9 @@ pageflow_next_text: Contributing
 
 ### Fixes
 
+* Skip the first frame of a debug stack trace - the information provided in there can never be complete
+  - Updated `FilterBacktrace`
+  - Updated `FilterBacktraceForTwoCodeCallers`
 * Make sure our base exceptions do not appear in the caller details that we include in an exception
   - Updated `UnsupportedType`
   - Updated `UnsupportedValue`
