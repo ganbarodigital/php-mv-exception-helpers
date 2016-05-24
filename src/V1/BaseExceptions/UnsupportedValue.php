@@ -86,6 +86,9 @@ class UnsupportedValue extends ParameterisedException implements HttpRuntimeErro
             $callerFilter = FilterCodeCaller::$DEFAULT_PARTIALS;
         }
 
+        // make sure we filter ourselves out
+        $callerFilter[] = self::class;
+
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $caller = FilterCodeCaller::from($backtrace, $callerFilter);

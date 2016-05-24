@@ -10,7 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Fixes
+
+* Make sure our base exceptions do not appear in the caller details that we include in an exception
+  - Updated `UnsupportedType`
+  - Updated `UnsupportedValue`
 
 ## v1.2016050201
 
