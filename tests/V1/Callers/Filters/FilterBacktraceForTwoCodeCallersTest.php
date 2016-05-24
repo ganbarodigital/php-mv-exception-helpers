@@ -81,7 +81,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $unit = new FilterBacktraceForTwoCodeCallers;
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         // ----------------------------------------------------------------
         // perform the change
@@ -104,7 +104,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         // ----------------------------------------------------------------
         // perform the change
@@ -174,7 +174,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [
             __CLASS__,
             'ReflectionMethod'
@@ -204,7 +204,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [
             __CLASS__,
             'ReflectionMethod',
@@ -239,7 +239,7 @@ class FilterBacktraceForTwoCodeCallersTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $partials = [
             __CLASS__,
             'ReflectionMethod',

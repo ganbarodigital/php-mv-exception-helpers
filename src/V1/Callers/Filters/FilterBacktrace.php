@@ -61,7 +61,7 @@ class FilterBacktrace
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 0)
+    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 1)
     {
         return self::from($backtrace, $partialsToFilterOut, $index);
     }
@@ -77,24 +77,15 @@ class FilterBacktrace
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = [], $index = 0)
+    public static function from($backtrace, $partialsToFilterOut = [], $index = 1)
     {
-        // we have to start looking one frame after
-        //
-        // this is because the data we're trying to assemble is split across
-        // two stack frames
-        $index++;
-
         // make sure we're not trying to look beyond the end of the stack trace
         $maxIndex = count($backtrace) - 1;
-        $prevIndex = max(0, $maxIndex - 1);
-        if ($index > $maxIndex) {
-            return self::extractFrameDetails($backtrace[$maxIndex], $backtrace[$prevIndex], $maxIndex);
-        }
+        $index = min($index, $maxIndex);
 
         // PHP's stack trace is a little esoteric. To find all the details about
         // a caller, we have to combine information from two stack frames.
-        $prevFrame = $backtrace[$index - 1];
+        $prevFrame = $backtrace[max($index - 1,0)];
 
         // find the first backtrace entry that passes our filters
         for ($i = $index; $i <= $maxIndex; $i++) {

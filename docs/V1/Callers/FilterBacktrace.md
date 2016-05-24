@@ -39,7 +39,7 @@ class FilterBacktrace
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 0);
+    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 1);
 
     /**
      * work out who has called a piece of code
@@ -52,7 +52,7 @@ class FilterBacktrace
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = [], $index = 0);
+    public static function from($backtrace, $partialsToFilterOut = [], $index = 1);
 }
 ```
 
@@ -126,6 +126,14 @@ You should expect some of the fields in the return array to be `NULL`:
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016052401
+
+* the default value of `$index` parameter was changed to be `1`. The previous default was `0`.
+
+  This is a bug fix. Frame #0 of a debug stack trace can contain partial information - a `class` and `function` with no matching `file` and `line` data. Because we can never complete that information (the `file` and `line` would have to be a frame #-1, which does not exist), there's absolutely no point in starting the filtering from frame #0.
 
 ## See Also
 
