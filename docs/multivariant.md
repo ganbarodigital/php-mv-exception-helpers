@@ -44,14 +44,14 @@ Multi-variant libraries avoid this problem entirely.
 
 ## How Do We Version Multi-Variant Libraries?
 
-Multi-variant libraries use __vYYYYMMDDRR__ style for Git tags:
+Multi-variant libraries use __v1.YYYYMMDDRR__ style for Git tags:
 
 * _YYYY_ is the year the library was released (as four digits)
 * _MM_ is the month the library was released (two digits, January is _01_)
 * _DD_ is the day of the month that the library was released (two digits)
 * _RR_ is how many times the library has been released on that day (two digits)
 
-For example: _v2016041401_, or _v2016041502_.
+For example: _v1.2016041401_, or _v1.2016041502_.
 
 Why are there no '.' between the different parts?
 
