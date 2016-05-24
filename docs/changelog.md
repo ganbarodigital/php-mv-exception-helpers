@@ -10,6 +10,10 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016052401
+
 ### Fixes
 
 * Skip the first frame of a debug stack trace - the information provided in there can never be complete
