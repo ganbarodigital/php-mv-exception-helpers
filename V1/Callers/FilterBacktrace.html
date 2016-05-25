@@ -61,39 +61,41 @@
 <p>Since v1.2016041701</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>FilterBacktrace</code> is a data filter. You give it the output from <code>debug_backtrace()</code>, and a list of PHP classnames or partial namespaces to filter, and it will return the first entry in the debug trace that passes the filter.</p>
+<p><code>FilterBacktrace</code> is a data filter. You give it the output from <code>debug_backtrace()</code>, and a list of PHP classnames or namespaces to filter, and it will return the first entry in the debug trace that passes the filter.</p>
 <p><code>FilterBacktrace</code> was introduced to separate out the low-level filtering code from <code>FilterCodeCaller</code>.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>FilterBacktrace</code> has the following public interface:</p>
-<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
+<pre><code class="language-php">namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
 
-class FilterBacktrace
+use GanbaroDigital\MissingBits\TraceInspectors\FilterBacktrace as BaseClass;
+
+class FilterBacktrace extends BaseClass
 {
     /**
      * work out who has called a piece of code
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @param  int $index
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 0);
+    public function __invoke($backtrace, $filterList = [], $index = 1);
 
     /**
      * work out who has called a piece of code
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @param  int $index
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = [], $index = 0);
+    public static function from($backtrace, $filterList = [], $index = 1);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="finding-a-single-stack-frame">Finding A Single Stack Frame</h3>
@@ -108,18 +110,18 @@ $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 // we need a list of namespaces to filter out
 //
 // this can be individual parts of namespaces, or whole classnames
-$partials = [
-    'Checks',
-    'Requirements',
+$filterList = [
+    'GanbaroDigital\Reflection\V1\Checks',
+    'GanbaroDigital\Reflection\V1\Requirements',
     FilterBacktrace::class,
 ];
 
 // to use as an object
 $filter = new FilterBacktrace;
-$caller = $filter($trace, $partials);
+$caller = $filter($trace, $filterList);
 
 // to call statically
-$caller = FilterBacktrace::from($trace, $partials);</code></pre>
+$caller = FilterBacktrace::from($trace, $filterList);</code></pre>
 <h3 id="finding-multiple-stack-frames">Finding Multiple Stack Frames</h3>
 <p><code>debug_backtrace()</code> returns the stack trace as an array. You can start the search from anywhere in this array by passing a third parameter into this filter. This is especially useful if your exception wants to know who called the code that is trying to throw an exception:</p>
 <pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
@@ -172,6 +174,25 @@ $caller2 = FilterBacktrace::from($trace, [], $caller1['stackIndex'] + 1);</code>
 </ul>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016052501">v1.2016052501</h3>
+<ul>
+<li>
+<p><code>FilterBacktrace</code> now extends the <a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/FilterBacktrace.html"><code>FilterBacktrace</code></a> from <a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a>.</p>
+<p>We didn't want projects depending upon <code>ganbarodigital/php-mv-exception-helpers</code> just because they wanted to add caller details to log messages. We've moved <code>FilterBacktrace</code> into <a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a> where it probably always belonged.</p>
+</li>
+<li>
+<p><code>FilterBacktrace</code> no longer filters out partial namespaces.</p>
+<p>This was a disaster waiting to happen. Filtering partial namespaces meant that we'd filter out your namespaces too - and that's a violation of the rule of no surprises. It's just too blunt an instrument. We've switched to filtering out whole namespaces only to make sure that we never filter out your namespaces when we meant to only filter out our namespaces.</p>
+</li>
+</ul>
+<h3 id="v12016052401">v1.2016052401</h3>
+<ul>
+<li>
+<p>the default value of <code>$index</code> parameter was changed to be <code>1</code>. The previous default was <code>0</code>.</p>
+<p>This is a bug fix. Frame #0 of a debug stack trace can contain partial information - a <code>class</code> and <code>function</code> with no matching <code>file</code> and <code>line</code> data. Because we can never complete that information (the <code>file</code> and <code>line</code> would have to be a frame #-1, which does not exist), there's absolutely no point in starting the filtering from frame #0.</p>
+</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code> class</a></li>

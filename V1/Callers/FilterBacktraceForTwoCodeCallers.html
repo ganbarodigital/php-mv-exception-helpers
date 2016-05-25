@@ -76,11 +76,11 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = []);
+    public function __invoke($backtrace, $filterList = []);
 
     /**
      * work out who has called a piece of code, and who (in turn) called that
@@ -88,11 +88,11 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = []);
+    public static function from($backtrace, $filterList = []);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <p><code>FilterBacktraceForTwoCodeCallers</code> can be used as an object, or as a static class method.</p>
@@ -106,18 +106,18 @@ $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 // we need a list of namespaces to filter out
 //
 // this can be individual parts of namespaces, or whole classnames
-$partials = [
-    'Checks',
-    'Requirements',
+$filterList = [
+    'GanbaroDigital\Reflection\V1\Checks',
+    'GanbaroDigital\Reflection\V1\Requirements',
     FilterBacktraceForTwoCodeCallers::class,
 ];
 
 // to use as an object
 $filter = new FilterBacktraceForTwoCodeCallers;
-$callers = $filter($trace, $partials);
+$callers = $filter($trace, $filterList);
 
 // to call statically
-$callers = FilterBacktraceForTwoCodeCallers::from($trace, $partials);</code></pre>
+$callers = FilterBacktraceForTwoCodeCallers::from($trace, $filterList);</code></pre>
 <h2 id="return-value">Return Value</h2>
 <p><code>FilterBacktraceForTwoCodeCallers</code> returns an array of <code>CodeCaller</code> value objects.</p>
 <ol>
@@ -127,6 +127,14 @@ $callers = FilterBacktraceForTwoCodeCallers::from($trace, $partials);</code></pr
 <p>This is very useful in exception messages. It allows your exception to state which bit of code is throwing the exception, and which bit of code caused the exception.</p>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016052501">v1.2016052501</h3>
+<ul>
+<li>
+<p><code>FilterBacktraceForTwoCodeCallers</code> no longer filters out partial namespaces.</p>
+<p>This was a disaster waiting to happen. Filtering partial namespaces meant that we'd filter out your namespaces too - and that's a violation of the rule of no surprises. It's just too blunt an instrument. We've switched to filtering out whole namespaces only to make sure that we never filter out your namespaces when we meant to only filter out our namespaces.</p>
+</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="CodeCaller.html"><code>CodeCaller</code> value object</a></li>

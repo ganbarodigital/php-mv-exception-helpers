@@ -65,9 +65,11 @@
 <p><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code></a> will build a <code>CodeCaller</code> object for you.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>CodeCaller</code> has the following public interface:</p>
-<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+<pre><code class="language-php">namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 
-class CodeCaller
+use GanbaroDigital\MissingBits\TraceInspectors\StackFrame;
+
+class CodeCaller extends StackFrame
 {
     /**
      * constructor
@@ -82,6 +84,7 @@ class CodeCaller
      *        which line in $file was the calling code on?
      * @param array $stack
      *        what was the call stack at the time?
+     * @inheritedFrom StackFrame
      */
     public function __construct($class, $function, $file, $line, $stack = []);
 
@@ -89,6 +92,7 @@ class CodeCaller
      * which class called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getClass();
 
@@ -96,6 +100,7 @@ class CodeCaller
      * which function or method called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getFunction();
 
@@ -103,6 +108,7 @@ class CodeCaller
      * which method called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getMethod();
 
@@ -110,6 +116,7 @@ class CodeCaller
      * which file was the calling code defined in?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getFilename();
 
@@ -117,6 +124,7 @@ class CodeCaller
      * which line in $this-&gt;getFile() was the calling code defined on?
      *
      * @return int|null
+     * @inheritedFrom StackFrame
      */
     public function getLine();
 
@@ -127,6 +135,7 @@ class CodeCaller
      * (probably to save memory - the call stack can be large)
      *
      * @return array
+     * @inheritedFrom StackFrame
      */
     public function getStack();
 
@@ -136,12 +145,26 @@ class CodeCaller
      * @return string
      */
     public function getCaller();
+
+    /**
+     * return our contents as a sensible, printable string
+     *
+     * @return string
+     * @inheritedFrom StackFrame
+     */
+    public function __toString();
 }</code></pre>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016052501">v1.2016052501</h3>
+<ul>
+<li><code>CodeCaller</code> now extends the <a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html"><code>StackFrame</code></a> from <a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a>.</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code> class</a></li>
+<li><a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html"><code>StackFrame</code> class</a></li>
 </ul>
             </article>
 

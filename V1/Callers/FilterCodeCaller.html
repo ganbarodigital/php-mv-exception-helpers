@@ -65,47 +65,32 @@
 <p><code>FilterCodeCaller</code> was introduced for use in the <code>UnsupportedType</code> exception.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>FilterCodeCaller</code> has the following public interface:</p>
-<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 
 class FilterCodeCaller
 {
     /**
-     * recommended list of namespaces to filter from
+     * work out who has called a piece of code
      *
-     * DO NOT CHANGE THIS ARRAY FROM YOUR CODE
-     *
-     * @var array
+     * @param  array $backtrace
+     *         the debug_backtrace() return value
+     * @param  array $$filterList
+     *         a list of namespaces and classes to skip over
+     * @return CodeCaller
      */
-    public static $DEFAULT_PARTIALS = [
-        'Checks' =&gt; 'Checks',
-        'Exceptions' =&gt; 'Exceptions',
-        'Requirements' =&gt; 'Requirements',
-    ];
+    public function __invoke($backtrace, $$filterList = []);
 
     /**
      * work out who has called a piece of code
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $$filterList
+     *         a list of namespaces and classes to skip over
      * @return CodeCaller
      */
-    public function __invoke($backtrace, $partialsToFilterOut = []);
-
-    /**
-     * work out who has called a piece of code
-     *
-     * @param  array $backtrace
-     *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
-     * @return CodeCaller
-     */
-    public static function from($backtrace, $partialsToFilterOut = []);
-}
-</code></pre>
+    public static function from($backtrace, $$filterList = []);
+}</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <p><code>FilterCodeCaller</code> can be used as an object, or as a static class method.</p>
 <pre><code class="language-php">// import first
@@ -117,23 +102,37 @@ $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
 // we need a list of namespaces to filter out
 //
-// this can be individual parts of namespaces, or whole classnames
-$partials = [
-    'Checks',
-    'Requirements',
+// this can be individual namespaces, or classnames
+$filterList = [
+    'GanbaroDigital\Reflection\V1\Checks',
+    'GanbaroDigital\Reflection\V1\Requirements',
     FilterCodeCaller::class,
 ];
 
 // to use as an object
 $filter = new FilterCodeCaller;
-$caller = $filter($trace, $partials);
+$caller = $filter($trace, $filterList);
 
 // to call statically
-$caller = FilterCodeCaller::from($trace, $partials);</code></pre>
+$caller = FilterCodeCaller::from($trace, $filterList);</code></pre>
 <h2 id="return-value">Return Value</h2>
 <p><code>FilterCodeCaller</code> returns a <code>CodeCaller</code> value object. This object will contain details about the first entry on the <code>debug_backtrace()</code> stack that passed filtering.</p>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016052501">v1.2016052501</h3>
+<ul>
+<li>
+<p><code>FilterCodeCaller</code> no longer filters out partial namespaces.</p>
+<p>This was a disaster waiting to happen. Filtering partial namespaces meant that we'd filter out your namespaces too - and that's a violation of the rule of no surprises. It's just too blunt an instrument. We've switched to filtering out whole namespaces only to make sure that we never filter out your namespaces when we meant to only filter out our namespaces.</p>
+</li>
+<li>
+<p>The public static property <code>FilterCodeCaller::$DEFAULT_PARTIALS</code> has been removed.</p>
+<p>It has been removed because we're no longer supporting filtering out partial namespaces.</p>
+<p>The truth is, it was always a bit of a risky hack. There was no way for us to prevent anyone from changing this list at runtime. It was a bug waiting to happen. So it's gone.</p>
+<p>This is a backwards-compatibility break - the kind which can cause your code to crash. The whole point of versioned APIs is that you can trust us not to break your code. But in this case it was simply too dangerous a feature to keep. We're sorry if you're using this library and this change causes you problems.</p>
+</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="CodeCaller.html"><code>CodeCaller</code> value object</a></li>

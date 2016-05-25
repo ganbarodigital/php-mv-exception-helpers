@@ -98,14 +98,14 @@
 <li>As far as each dependency is concerned, the <em>API version</em> of the library that it needs is installed and available for use.</li>
 </ul>
 <h2 id="how-do-we-version-multi-variant-libraries">How Do We Version Multi-Variant Libraries?</h2>
-<p>Multi-variant libraries use <strong>vYYYYMMDDRR</strong> style for Git tags:</p>
+<p>Multi-variant libraries use <strong>v1.YYYYMMDDRR</strong> style for Git tags:</p>
 <ul>
 <li><em>YYYY</em> is the year the library was released (as four digits)</li>
 <li><em>MM</em> is the month the library was released (two digits, January is <em>01</em>)</li>
 <li><em>DD</em> is the day of the month that the library was released (two digits)</li>
 <li><em>RR</em> is how many times the library has been released on that day (two digits)</li>
 </ul>
-<p>For example: <em>v2016041401</em>, or <em>v2016041502</em>.</p>
+<p>For example: <em>v1.2016041401</em>, or <em>v1.2016041502</em>.</p>
 <p>Why are there no '.' between the different parts?</p>
 <ul>
 <li>When you use <code>composer require</code>, it adds a <code>^X.Y</code> constraint to your list of requirements. This will accept all tags that start with <code>X</code>. It will not accept any tag that starts with <code>X+1</code> or more.</li>
