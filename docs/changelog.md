@@ -10,7 +10,13 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Refactor
+
+* Move the code caller functionality into `ganbarodigital/php-the-missing-bits`. This is the right place for the functionality to live.
+  - `FilterBacktrace` now extends code provided by `php-the-missing-bits`
+  - `CodeCaller` now extends code provided by `php-the-missing-bits`
+  - `FilterBacktrace`, `FilterBacktraceForTwoCodeCallers` and `FilterCodeCaller` no longer support filtering partial namespaces
+  - `FilterCodeCaller::$DEFAULT_PARTIALS` is gone
 
 ## v1.2016052401
 

@@ -35,11 +35,11 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = []);
+    public function __invoke($backtrace, $filterList = []);
 
     /**
      * work out who has called a piece of code, and who (in turn) called that
@@ -47,11 +47,11 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = []);
+    public static function from($backtrace, $filterList = []);
 }
 ```
 
@@ -70,18 +70,18 @@ $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 // we need a list of namespaces to filter out
 //
 // this can be individual parts of namespaces, or whole classnames
-$partials = [
-    'Checks',
-    'Requirements',
+$filterList = [
+    'GanbaroDigital\Reflection\V1\Checks',
+    'GanbaroDigital\Reflection\V1\Requirements',
     FilterBacktraceForTwoCodeCallers::class,
 ];
 
 // to use as an object
 $filter = new FilterBacktraceForTwoCodeCallers;
-$callers = $filter($trace, $partials);
+$callers = $filter($trace, $filterList);
 
 // to call statically
-$callers = FilterBacktraceForTwoCodeCallers::from($trace, $partials);
+$callers = FilterBacktraceForTwoCodeCallers::from($trace, $filterList);
 ```
 
 ## Return Value
@@ -96,6 +96,14 @@ This is very useful in exception messages. It allows your exception to state whi
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016052501
+
+* `FilterBacktraceForTwoCodeCallers` no longer filters out partial namespaces.
+
+  This was a disaster waiting to happen. Filtering partial namespaces meant that we'd filter out your namespaces too - and that's a violation of the rule of no surprises. It's just too blunt an instrument. We've switched to filtering out whole namespaces only to make sure that we never filter out your namespaces when we meant to only filter out our namespaces.
 
 ## See Also
 

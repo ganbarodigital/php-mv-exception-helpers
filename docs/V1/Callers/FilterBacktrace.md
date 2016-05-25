@@ -15,7 +15,7 @@ Since v1.2016041701
 
 ## Description
 
-`FilterBacktrace` is a data filter. You give it the output from `debug_backtrace()`, and a list of PHP classnames or partial namespaces to filter, and it will return the first entry in the debug trace that passes the filter.
+`FilterBacktrace` is a data filter. You give it the output from `debug_backtrace()`, and a list of PHP classnames or namespaces to filter, and it will return the first entry in the debug trace that passes the filter.
 
 `FilterBacktrace` was introduced to separate out the low-level filtering code from `FilterCodeCaller`.
 
@@ -24,35 +24,37 @@ Since v1.2016041701
 `FilterBacktrace` has the following public interface:
 
 ```php
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
+namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktrace;
 
-class FilterBacktrace
+use GanbaroDigital\MissingBits\TraceInspectors\FilterBacktrace as BaseClass;
+
+class FilterBacktrace extends BaseClass
 {
     /**
      * work out who has called a piece of code
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @param  int $index
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [], $index = 1);
+    public function __invoke($backtrace, $filterList = [], $index = 1);
 
     /**
      * work out who has called a piece of code
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @param  int $index
      *         how far down the stack do we want to start looking from?
      * @return array
      */
-    public static function from($backtrace, $partialsToFilterOut = [], $index = 1);
+    public static function from($backtrace, $filterList = [], $index = 1);
 }
 ```
 
@@ -73,18 +75,18 @@ $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 // we need a list of namespaces to filter out
 //
 // this can be individual parts of namespaces, or whole classnames
-$partials = [
-    'Checks',
-    'Requirements',
+$filterList = [
+    'GanbaroDigital\Reflection\V1\Checks',
+    'GanbaroDigital\Reflection\V1\Requirements',
     FilterBacktrace::class,
 ];
 
 // to use as an object
 $filter = new FilterBacktrace;
-$caller = $filter($trace, $partials);
+$caller = $filter($trace, $filterList);
 
 // to call statically
-$caller = FilterBacktrace::from($trace, $partials);
+$caller = FilterBacktrace::from($trace, $filterList);
 ```
 
 ### Finding Multiple Stack Frames
@@ -128,6 +130,16 @@ You should expect some of the fields in the return array to be `NULL`:
 None at this time.
 
 ## Changelog
+
+### v1.2016052501
+
+* `FilterBacktrace` now extends the [`FilterBacktrace`](http://ganbarodigital.github.io/php-the-missing-bits/traces/FilterBacktrace.html) from [PHP: The Missing Bits](http://ganbarodigital.github.io/php-the-missing-bits/).
+
+  We didn't want projects depending upon `ganbarodigital/php-mv-exception-helpers` just because they wanted to add caller details to log messages. We've moved `FilterBacktrace` into [PHP: The Missing Bits](http://ganbarodigital.github.io/php-the-missing-bits/) where it probably always belonged.
+
+* `FilterBacktrace` no longer filters out partial namespaces.
+
+  This was a disaster waiting to happen. Filtering partial namespaces meant that we'd filter out your namespaces too - and that's a violation of the rule of no surprises. It's just too blunt an instrument. We've switched to filtering out whole namespaces only to make sure that we never filter out your namespaces when we meant to only filter out our namespaces.
 
 ### v1.2016052401
 

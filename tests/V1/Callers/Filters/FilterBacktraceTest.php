@@ -140,9 +140,9 @@ class FilterBacktraceTest extends PHPUnit_Framework_TestCase
         $expectedFrame = [
             'file' => $backtrace[0]['file'],
             'line' => $backtrace[0]['line'],
-            'class' => $backtrace[1]['class'],
+            'class' => null,
             'function' => $backtrace[1]['function'],
-            'type' => $backtrace[1]['type'],
+            'type' => null,
             'stackIndex' => 1,
         ];
 
