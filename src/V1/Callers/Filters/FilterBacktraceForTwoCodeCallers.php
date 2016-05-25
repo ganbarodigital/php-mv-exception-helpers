@@ -57,13 +57,13 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array<CodeCaller>
      */
-    public function __invoke($backtrace, $partialsToFilterOut = [])
+    public function __invoke($backtrace, $filterList = [])
     {
-        return self::from($backtrace, $partialsToFilterOut);
+        return self::from($backtrace, $filterList);
     }
 
     /**
@@ -72,15 +72,15 @@ class FilterBacktraceForTwoCodeCallers
      *
      * @param  array $backtrace
      *         the debug_backtrace() return value
-     * @param  array $partialsToFilterOut
-     *         a list of partial namespaces to skip over
+     * @param  array $filterList
+     *         a list of namespaces and classes to skip over
      * @return array<CodeCaller>
      */
-    public static function from($backtrace, $partialsToFilterOut = [])
+    public static function from($backtrace, $filterList = [])
     {
         // get the call stack frame that we want to return
-        $frame1 = FilterBacktrace::from($backtrace, $partialsToFilterOut, 1);
-        $frame2 = FilterBacktrace::from($backtrace, $partialsToFilterOut, $frame1['stackIndex'] + 1);
+        $frame1 = FilterBacktrace::from($backtrace, $filterList, 1);
+        $frame2 = FilterBacktrace::from($backtrace, $filterList, $frame1['stackIndex'] + 1);
 
         // convert the stack frame into something that's easier to use
         $retval = [

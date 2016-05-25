@@ -43,157 +43,15 @@
 
 namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Values;
 
+use GanbaroDigital\MissingBits\TraceInspectors\StackFrame;
+
 /**
  * CodeCaller holds details about who called a piece of PHP code.
  *
  * Use `FilterCodeCaller` to build a CodeCaller from the call stack.
  */
-class CodeCaller
+class CodeCaller extends StackFrame
 {
-    /**
-     * which class called us?
-     *
-     * @var string|null
-     */
-    private $class;
-
-    /**
-     * which function or method called us?
-     *
-     * @var string|null
-     */
-    private $function;
-
-    /**
-     * how was the function or method called?
-     *
-     * @var string|null
-     */
-    private $callType;
-
-    /**
-     * which file was the code in?
-     *
-     * @var string|null
-     */
-    private $file;
-
-    /**
-     * which line in $file was the code on?
-     *
-     * @var int|null
-     */
-    private $line;
-
-    /**
-     * what were the contents of the call stack at the time?
-     *
-     * @var array
-     */
-    private $stack;
-
-    /**
-     * constructor
-     *
-     * @param string|null $class
-     *        which class called us?
-     * @param string|null $function
-     *        which function or method called us?
-     * @param string|null $callType
-     *        how was $function called?
-     * @param string|null $file
-     *        which file was the calling code in?
-     * @param int|null $line
-     *        which line in $file was the calling code on?
-     * @param array $stack
-     *        what was the call stack at the time?
-     */
-    public function __construct($class, $function, $callType, $file, $line, $stack = [])
-    {
-        $this->class = $class;
-        $this->function = $function;
-        $this->callType = $callType;
-        $this->file = $file;
-        $this->line = $line;
-        $this->stack = $stack;
-    }
-
-    /**
-     * which class called us?
-     *
-     * @return string|null
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * which function or method called us?
-     *
-     * @return string|null
-     */
-    public function getFunction()
-    {
-        return $this->function;
-    }
-
-    /**
-     * which method called us?
-     *
-     * @return string|null
-     */
-    public function getMethod()
-    {
-        if ($this->class === null) {
-            return null;
-        }
-        return $this->function;
-    }
-
-    /**
-     * how was the function|method called?
-     *
-     * @return string|null
-     */
-    public function getCallType()
-    {
-        return $this->callType;
-    }
-
-    /**
-     * which file was the calling code defined in?
-     *
-     * @return string|null
-     */
-    public function getFilename()
-    {
-        return $this->file;
-    }
-
-    /**
-     * which line in $this->getFile() was the calling code defined on?
-     *
-     * @return int|null
-     */
-    public function getLine()
-    {
-        return $this->line;
-    }
-
-    /**
-     * what were the contents of the call stack at the time?
-     *
-     * an empty array means that we weren't asked to save the call stack
-     * (probably to save memory - the call stack can be large)
-     *
-     * @return array
-     */
-    public function getStack()
-    {
-        return $this->stack;
-    }
-
     // =========================================================================
     //
     // HELPERS
@@ -207,33 +65,6 @@ class CodeCaller
      */
     public function getCaller()
     {
-        // we have been called from a class, a function, or a PHP script
-        if (isset($this->class)) {
-            $retval = $this->class . $this->callType . $this->function . '()';
-        }
-        else if (isset($this->function)) {
-            $retval = $this->function . '()';
-        }
-        else {
-            $retval = $this->file;
-        }
-
-        // which line was the caller on?
-        if (isset($this->line)) {
-            $retval .= "@" . $this->line;
-        }
-
-        // all done
-        return $retval;
-    }
-
-    /**
-     * return our contents as a sensible, printable string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getCaller();
+        return $this->getExecutedCodeSummary();
     }
 }

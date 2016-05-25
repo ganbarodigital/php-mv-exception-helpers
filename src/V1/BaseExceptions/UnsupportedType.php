@@ -83,11 +83,8 @@ class UnsupportedType extends ParameterisedException implements HttpRuntimeError
 
         // what filter are we applying?
         if (!is_array($callerFilter)) {
-            $callerFilter = FilterCodeCaller::$DEFAULT_PARTIALS;
+            $callerFilter = [];
         }
-
-        // make sure we filter ourselves out
-        $callerFilter[] = self::class;
 
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

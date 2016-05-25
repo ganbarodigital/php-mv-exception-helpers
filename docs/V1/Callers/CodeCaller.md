@@ -24,9 +24,11 @@ Since v1.2016041701
 `CodeCaller` has the following public interface:
 
 ```php
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 
-class CodeCaller
+use GanbaroDigital\MissingBits\TraceInspectors\StackFrame;
+
+class CodeCaller extends StackFrame
 {
     /**
      * constructor
@@ -41,6 +43,7 @@ class CodeCaller
      *        which line in $file was the calling code on?
      * @param array $stack
      *        what was the call stack at the time?
+     * @inheritedFrom StackFrame
      */
     public function __construct($class, $function, $file, $line, $stack = []);
 
@@ -48,6 +51,7 @@ class CodeCaller
      * which class called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getClass();
 
@@ -55,6 +59,7 @@ class CodeCaller
      * which function or method called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getFunction();
 
@@ -62,6 +67,7 @@ class CodeCaller
      * which method called us?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getMethod();
 
@@ -69,6 +75,7 @@ class CodeCaller
      * which file was the calling code defined in?
      *
      * @return string|null
+     * @inheritedFrom StackFrame
      */
     public function getFilename();
 
@@ -76,6 +83,7 @@ class CodeCaller
      * which line in $this->getFile() was the calling code defined on?
      *
      * @return int|null
+     * @inheritedFrom StackFrame
      */
     public function getLine();
 
@@ -86,6 +94,7 @@ class CodeCaller
      * (probably to save memory - the call stack can be large)
      *
      * @return array
+     * @inheritedFrom StackFrame
      */
     public function getStack();
 
@@ -95,6 +104,14 @@ class CodeCaller
      * @return string
      */
     public function getCaller();
+
+    /**
+     * return our contents as a sensible, printable string
+     *
+     * @return string
+     * @inheritedFrom StackFrame
+     */
+    public function __toString();
 }
 ```
 
@@ -102,6 +119,13 @@ class CodeCaller
 
 None at this time.
 
+## Changelog
+
+### v1.2016052501
+
+* `CodeCaller` now extends the [`StackFrame`](http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html) from [PHP: The Missing Bits](http://ganbarodigital.github.io/php-the-missing-bits/).
+
 ## See Also
 
 * [`FilterCodeCaller` class](FilterCodeCaller.html)
+* [`StackFrame` class](http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html)
