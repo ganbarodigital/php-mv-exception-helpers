@@ -43,6 +43,7 @@
 
 namespace GanbaroDigital\ExceptionHelpers\V1\BaseExceptions;
 
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
@@ -69,21 +70,56 @@ class UnsupportedValue extends ParameterisedException implements HttpRuntimeErro
      *         parameter that contains $data
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array|null $callerFilter
+     * @param  array $callerFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return UnsupportedValue
      *         an fully-built exception for you to throw
      */
-    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null)
+    public static function newFromInputParameter($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
     {
         // what flags are we applying?
         if (!is_int($typeFlags)) {
             $typeFlags = GetPrintableType::FLAG_DEFAULTS;
         }
 
-        // what filter are we applying?
-        if (!is_array($callerFilter)) {
-            $callerFilter = [];
+        // who called us?
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $callers = FilterBacktraceForTwoCodeCallers::from($backtrace, $callerFilter);
+
+        // all done
+        return new static(
+            "%calledByName\$s: %thrownByName\$s says '%fieldOrVarName\$s' contains an unsupported value",
+            [
+                'fieldOrVarName' => $fieldOrVarName,
+                'var' => $var,
+                'thrownByName' => $callers[0]->getCaller(),
+                'thrownBy' => $callers[0],
+                'calledByName' => $callers[1]->getCaller(),
+                'calledBy' => $callers[1]
+            ]
+        );
+    }
+
+    /**
+     * create a new exception
+     *
+     * @param  mixed $var
+     *         the variable that has the unsupported value
+     * @param  string $fieldOrVarName
+     *         the name of the input field, PHP variable or function/method
+     *         parameter that contains $data
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final exception message?
+     * @param  array $callerFilter
+     *         are there any namespaces we want to filter out of the call stack?
+     * @return UnsupportedValue
+     *         an fully-built exception for you to throw
+     */
+    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
+    {
+        // what flags are we applying?
+        if (!is_int($typeFlags)) {
+            $typeFlags = GetPrintableType::FLAG_DEFAULTS;
         }
 
         // who called us?
@@ -92,12 +128,12 @@ class UnsupportedValue extends ParameterisedException implements HttpRuntimeErro
 
         // all done
         return new static(
-            "%callerName\$s: '%fieldOrVarName\$s' contains an unsupported value",
+            "%thrownByName\$s: '%fieldOrVarName\$s' contains an unsupported value",
             [
                 'fieldOrVarName' => $fieldOrVarName,
                 'var' => $var,
-                'callerName' => $caller->getCaller(),
-                'caller' => $caller,
+                'thrownByName' => $caller->getCaller(),
+                'thrownBy' => $caller,
             ]
         );
     }

@@ -146,28 +146,72 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getMessage
+     * @covers ::newFromInputParameter
      */
-    public function testExceptionMessageContainsFieldAndUnsupportedValue()
+    public function test_can_create_from_input_parameter()
     {
         // ----------------------------------------------------------------
         // setup your test
 
         $data = null;
         $name = "\$alfred";
-        $unit = UnsupportedValue::newFromVar($data, $name);
 
-        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\BaseExceptions\UnsupportedValueTest->testExceptionMessageContainsFieldAndUnsupportedValue()@158: '\$alfred' contains an unsupported value";
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ' says \'$alfred\' contains an unsupported value';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 11),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 10),
+            'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'calledByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'var' => null,
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualMessage = $unit->getMessage();
+        $unit = UnsupportedValue::newFromInputParameter($data, $name);
 
         // ----------------------------------------------------------------
         // test the results
 
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
         $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
     }
 
+    /**
+     * @covers ::newFromVar
+     */
+    public function test_can_create_from_PHP_variable()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 11) . ': \'$alfred\' contains an unsupported value';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 9),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 8),
+            'fieldOrVarName' => '$alfred',
+            'var' => null
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = UnsupportedValue::newFromVar($data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
 }

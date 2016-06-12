@@ -81,7 +81,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::newFromVar
      */
-    public function testIsRuntimeException()
+    public function test_is_RuntimeException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -103,7 +103,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::newFromVar
      */
-    public function testIsHttpRuntimeErrorException()
+    public function test_is_HttpRuntimeErrorException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -125,7 +125,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::getHttpStatus
      */
-    public function testMapsToHttpStatus500()
+    public function test_maps_to_HTTP_status_500()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -146,28 +146,73 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getMessage
+     * @covers ::newFromInputParameter
      */
-    public function testExceptionMessageContainsFieldAndUnsupportedType()
+    public function test_can_create_from_input_parameter()
     {
         // ----------------------------------------------------------------
         // setup your test
 
         $data = null;
         $name = "\$alfred";
-        $unit = UnsupportedType::newFromVar($data, $name);
 
-        $expectedMessage = "GanbaroDigitalTest\ExceptionHelpers\V1\BaseExceptions\UnsupportedTypeTest->testExceptionMessageContainsFieldAndUnsupportedType()@158: '\$alfred' cannot be type 'NULL'";
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ' says \'$alfred\' cannot be type \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 11),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 10),
+            'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'calledByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'dataType' => 'NULL',
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualMessage = $unit->getMessage();
+        $unit = UnsupportedType::newFromInputParameter($data, $name);
 
         // ----------------------------------------------------------------
         // test the results
 
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
         $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * @covers ::newFromVar
+     */
+    public function test_can_create_from_PHP_variable()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 11) . ': \'$alfred\' cannot be type \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 9),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 8),
+            'fieldOrVarName' => '$alfred',
+            'dataType' => 'NULL'
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = UnsupportedType::newFromVar($data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
     }
 
 }
