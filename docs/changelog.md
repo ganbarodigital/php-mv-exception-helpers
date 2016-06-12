@@ -10,6 +10,20 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+## v1.2016061201
+
+### New
+
+* added separate factory methods when throwing an exception about an input parameter
+  - added `UnsupportedType::newFromInputParameter`
+  - added `UnsupportedValue::newFromInputParameter`
+
+### Fixes
+
+* `$callerFilter` signature is now enforced as array
+  - updated `UnsupportedType`
+  - updated `UnsupportedValue`
+
 ## v1.2016052501
 
 Released Wed 25th May 2016.
