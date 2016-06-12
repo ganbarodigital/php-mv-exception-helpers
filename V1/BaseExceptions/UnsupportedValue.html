@@ -89,12 +89,17 @@ class UnsupportedValue
      *         parameter that contains $data
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array|null $callerFilter
+     * @param  array| $callerFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return UnsupportedValue
      *         an fully-built exception for you to throw
      */
-    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
+    public static function newFromVar(
+        $var,
+        $fieldOrVarName,
+        $typeFlags = null,
+        array $callerFilter = []
+    );
 
     /**
      * what was the data that we used to create the printable message?
@@ -131,6 +136,22 @@ class UnsupportedValue
 <ul>
 <li><a href="ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
 <li><a href="http://ganbarodigital.github.io/php-http-status/reference/Interfaces/HttpRuntimeErrorException.html"><code>HttpRuntimeErrorException</code> interface</a></li>
+</ul>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016061201">v1.2016061201</h3>
+<ul>
+<li>
+<p><code>$callerFilter</code> signature was changed to always be an array</p>
+<p>This was the original intention.</p>
+</li>
+<li>
+<p><code>::newFromInputParameter()</code> added</p>
+<p>Call this factory method when the unsupported value was passed into your method as an input parameter. The exception's message data will include extra details about who called your method.</p>
+</li>
+<li>
+<p><code>::newFromVar()</code> - message data contents buffed</p>
+<p>We now have explicit <code>thrownByName</code> and <code>thrownBy</code> entries to show you where the exception was created.</p>
+</li>
 </ul>
             </article>
 
