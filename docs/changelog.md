@@ -10,6 +10,8 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+## v1.2016061201
+
 ### New
 
 * added separate factory methods when throwing an exception about an input parameter
