@@ -65,3 +65,6 @@ menu:
             callers:
                 text: Callers
                 relativeUrl: V1/Callers/index.html
+            parameterbuilders:
+                text: Parameter Builders
+                relativeUrl: V1/ParameterBuilders/index.html
