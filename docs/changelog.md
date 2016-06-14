@@ -16,6 +16,7 @@ pageflow_next_text: Contributing
   - added `BuildThrownAndCalledBy`
   - added `BuildThrownBy`
   - updated `UnsupportedType` to use the new helpers
+  - updated `UnsupportedValue` to use the new helpers
 
 ## v1.2016061201
 
