@@ -45,6 +45,8 @@ namespace GanbaroDigital\ExceptionHelpers\V1\BaseExceptions;
 
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
+use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\BuildThrownAndCalledBy;
+use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\BuildThrownBy;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
@@ -57,6 +59,8 @@ use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
  */
 class UnsupportedType extends ParameterisedException implements HttpRuntimeErrorException
 {
+    const MSG_VAR = "'%fieldOrVarName\$s' cannot be type '%dataType\$s'";
+
     // adds 'getHttpStatus()' that returns a HTTP 500 status value object
     use UnexpectedErrorStatusProvider;
 
@@ -77,30 +81,18 @@ class UnsupportedType extends ParameterisedException implements HttpRuntimeError
      */
     public static function newFromInputParameter($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
     {
-        // what flags are we applying?
-        if (!is_int($typeFlags)) {
-            $typeFlags = GetPrintableType::FLAG_DEFAULTS;
-        }
-
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $callers = FilterBacktraceForTwoCodeCallers::from($backtrace, $callerFilter);
 
-        // what type was rejected?
-        $type = GetPrintableType::of($var, $typeFlags);
+        // build the basic message and data
+        list($message, $data) = BuildThrownAndCalledBy::from(self::MSG_VAR, $backtrace);
+
+        // add in what's unique to us
+        $data['dataType'] = GetPrintableType::of($var, $typeFlags);
+        $data['fieldOrVarName'] = $fieldOrVarName;
 
         // all done
-        return new static(
-            "%calledByName\$s: %thrownByName\$s says '%fieldOrVarName\$s' cannot be type '%dataType\$s'",
-            [
-                'fieldOrVarName' => $fieldOrVarName,
-                'dataType' => $type,
-                'thrownByName' => $callers[0]->getCaller(),
-                'thrownBy' => $callers[0],
-                'calledByName' => $callers[1]->getCaller(),
-                'calledBy' => $callers[1],
-            ]
-        );
+        return new static($message, $data);
     }
 
     /**
@@ -120,27 +112,17 @@ class UnsupportedType extends ParameterisedException implements HttpRuntimeError
      */
     public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
     {
-        // what flags are we applying?
-        if (!is_int($typeFlags)) {
-            $typeFlags = GetPrintableType::FLAG_DEFAULTS;
-        }
-
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $caller = FilterCodeCaller::from($backtrace, $callerFilter);
 
-        // what type was rejected?
-        $type = GetPrintableType::of($var, $typeFlags);
+        // build the basic message and data
+        list($message, $data) = BuildThrownBy::from(self::MSG_VAR, $backtrace);
+
+        // add in what's unique to us
+        $data['dataType'] = GetPrintableType::of($var, $typeFlags);
+        $data['fieldOrVarName'] = $fieldOrVarName;
 
         // all done
-        return new static(
-            "%thrownByName\$s: '%fieldOrVarName\$s' cannot be type '%dataType\$s'",
-            [
-                'fieldOrVarName' => $fieldOrVarName,
-                'dataType' => $type,
-                'thrownByName' => $caller->getCaller(),
-                'thrownBy' => $caller,
-            ]
-        );
+        return new static($message, $data);
     }
 }
