@@ -10,6 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+### New
+
+* added helpers to standardise the structure of format strings and parameter lists that get fed into `ParameterisedException`
+  - added `BuildThrownAndCalledBy`
+
 ## v1.2016061201
 
 ### New
