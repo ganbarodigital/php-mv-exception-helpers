@@ -41,11 +41,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/ParameterBuilders/index.html">Parameter Builders</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/ParameterBuilders/index.html">Parameter Builders</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -53,128 +53,41 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="HowThePhpStackFrameWorks.html">Prev: How The PHP Stack Frame Works</a></li>
-                                                      <li><a href="FilterBacktrace.html">Next: FilterBacktrace class</a></li>
+                                    <li></li>
+                                                      <li><a href="BuildThrownAndCalledBy.html">Next: BuildThrownAndCalledBy class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="codecaller">CodeCaller</h1>
-<div class="callout info">
-<p>Since v1.2016041701</p>
-</div>
-<h2 id="description">Description</h2>
-<p><code>CodeCaller</code> is a value object. It represents a stack frame on a <code>debug_backtrace()</code> stack.</p>
-<p><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code></a> will build a <code>CodeCaller</code> object for you.</p>
-<h2 id="public-interface">Public Interface</h2>
-<p><code>CodeCaller</code> has the following public interface:</p>
-<pre><code class="language-php">namespace GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
-
-use GanbaroDigital\MissingBits\TraceInspectors\StackFrame;
-
-class CodeCaller extends StackFrame
-{
-    /**
-     * constructor
-     *
-     * @param string|null $class
-     *        which class called us?
-     * @param string|null $function
-     *        which function or method called us?
-     * @param string|null $file
-     *        which file was the calling code in?
-     * @param int|null $line
-     *        which line in $file was the calling code on?
-     * @param array $stack
-     *        what was the call stack at the time?
-     * @inheritedFrom StackFrame
-     */
-    public function __construct($class, $function, $file, $line, $stack = []);
-
-    /**
-     * which class called us?
-     *
-     * @return string|null
-     * @inheritedFrom StackFrame
-     */
-    public function getClass();
-
-    /**
-     * which function or method called us?
-     *
-     * @return string|null
-     * @inheritedFrom StackFrame
-     */
-    public function getFunction();
-
-    /**
-     * which method called us?
-     *
-     * @return string|null
-     * @inheritedFrom StackFrame
-     */
-    public function getMethod();
-
-    /**
-     * which file was the calling code defined in?
-     *
-     * @return string|null
-     * @inheritedFrom StackFrame
-     */
-    public function getFilename();
-
-    /**
-     * which line in $this-&gt;getFile() was the calling code defined on?
-     *
-     * @return int|null
-     * @inheritedFrom StackFrame
-     */
-    public function getLine();
-
-    /**
-     * what were the contents of the call stack at the time?
-     *
-     * an empty array means that we weren't asked to save the call stack
-     * (probably to save memory - the call stack can be large)
-     *
-     * @return array
-     * @inheritedFrom StackFrame
-     */
-    public function getStack();
-
-    /**
-     * return our contents as a sensible, printable string
-     *
-     * @return string
-     */
-    public function getCaller();
-
-    /**
-     * return our contents as a sensible, printable string
-     *
-     * @return string
-     * @inheritedFrom StackFrame
-     */
-    public function __toString();
-}</code></pre>
-<h2 id="notes">Notes</h2>
-<p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016052501">v1.2016052501</h3>
-<ul>
-<li><code>CodeCaller</code> now extends the <a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html"><code>StackFrame</code></a> from <a href="http://ganbarodigital.github.io/php-the-missing-bits/">PHP: The Missing Bits</a>.</li>
-</ul>
-<h2 id="see-also">See Also</h2>
-<ul>
-<li><a href="FilterCodeCaller.html"><code>FilterCodeCaller</code> class</a></li>
-<li><a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/StackFrame.html"><code>StackFrame</code> class</a></li>
-</ul>
+                <h1 id="parameter-builders">Parameter Builders</h1>
+<h2 id="purpose">Purpose</h2>
+<p>This is a collection of helpers for building the <code>$formatString</code> and <code>$data</code> parameters for a <a href="../BaseExceptions/ParameterisedException.html"><code>ParameterisedException</code></a>.</p>
+<h2 id="available-classes">Available Classes</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="BuildThrownAndCalledBy.html"><code>BuildThrownAndCalledBy</code></a></td>
+<td>work out who is throwing the exception, and who is calling the code that is throwing the exception</td>
+</tr>
+<tr>
+<td><a href="BuildThrownBy.html"><code>BuildThrownBy</code></a></td>
+<td>work out who is throwing the exception</td>
+</tr>
+</tbody>
+</table>
+<p>Click on the name of a class to see full details.</p>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="HowThePhpStackFrameWorks.html">Prev: How The PHP Stack Frame Works</a></li>
-                                                      <li><a href="FilterBacktrace.html">Next: FilterBacktrace class</a></li>
+                                    <li></li>
+                                                      <li><a href="BuildThrownAndCalledBy.html">Next: BuildThrownAndCalledBy class</a></li>
                                 </ul>
             </nav>
                     </main>

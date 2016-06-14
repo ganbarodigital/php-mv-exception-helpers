@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Exception Helpers Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Exception Helpers Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers for your exceptions</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/index.html">Base Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/Callers/index.html">Callers</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/ParameterBuilders/index.html">Parameter Builders</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="BuildThrownAndCalledBy.html">Prev: BuildThrownAndCalledBy class</a></li>
+                                                      <li></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="buildthrownby">BuildThrownBy</h1>
+<div class="callout info">
+Since v1.2016061401
+</div>
+<h2 id="description">Description</h2>
+<p>Use <code>BuildThrownBy</code> to build the <code>$formatString</code> and initial <code>$data</code> parameters for <a href="../BaseExceptions/ParameterisedException.html"><code>ParameterisedException::__construct()</code></a>.</p>
+<p><code>BuildThrownBy</code> will add details about:</p>
+<ul>
+<li>the code that is throwing the exception</li>
+</ul>
+<p>to both the <code>$formatString</code> and <code>$data</code>.</p>
+<p>It's intended for use when throwing an exception about:</p>
+<ul>
+<li>a value has been created in a method, or</li>
+<li>a value that has been returned from a piece of code you have called</li>
+</ul>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>BuildThrownBy</code> has the following public interface:</p>
+<pre><code class="language-php">// BuildThrownBy lives in this namespace
+namespace GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders;
+
+class BuildThrownBy
+{
+    /**
+     * build an exception message and data, including details of
+     * - who is throwing the exception
+     *
+     * @param  string $formatString
+     *         the message for your exception
+     * @param  array $backtrace
+     *         the output of debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+     * @param  array $callerFilter
+     *         list of classes to ignore in the backtrace
+     * @return array
+     *         - [0] is the modified format string
+     *         - [1] is the message data
+     */
+    public static function from(
+        $formatString,
+        array $backtrace,
+        array $callerFilter = []
+    );
+}</code></pre>
+<h2 id="return-values">Return Values</h2>
+<p><code>BuildThrownBy::from()</code> returns an array containing two values:</p>
+<ol>
+<li>the modified <code>$formatString</code></li>
+<li>an array of named parameters to use as <code>ParameterisedException</code>'s <code>$data</code></li>
+</ol>
+<p>Use <code>list()</code> to unpack these values:</p>
+<pre><code class="language-php">list($newFormat, $data) = BuildThrownBy::from($format, $backtrace);</code></pre>
+<h3 id="modified-format-string">Modified Format String</h3>
+<p>The first parameter that you pass to <code>BuildThrownBy::from()</code> is a <a href="http://ganbarodigital.github.io/php-the-missing-bits/strings/vnsprintf.html"><code>vnsprintf()</code></a> format string. <code>BuildThrownBy::from()</code> takes your format string, and adds the following to the front of it:</p>
+<pre><code>%thrownByName$s:</code></pre>
+<p>For example, if you called <code>BuildThrownBy::from()</code> with the format string:</p>
+<pre><code>'%fieldOrVarName$s' is less than zero</code></pre>
+<p>then <code>BuildThrownBy::from()</code> will return a modified format string:</p>
+<pre><code>%thrownByName$s: '%fieldOrVarName$s' is less than zero</code></pre>
+<p><code>%thrownByName$s</code> is a <em>named parameter</em>. Internally, <code>ParameterisedException::__construct()</code> calls <a href="http://ganbarodigital.github.io/php-the-missing-bits/strings/vnsprintf.html"><code>vnsprintf()</code></a> to expand your final format string. The value of <code>%thrownByName$s</code> is in the parameter data. This is the second value returned by <code>BuildThrownBy::from()</code>.</p>
+<h3 id="parameter-data">Parameter Data</h3>
+<p>The second parameter that you pass to <code>BuildThrownBy::from()</code> is a PHP <code>debug_backtrace()</code> result. <code>BuildThrownBy::from()</code> examines the backtrace that you provide, and returns an array of named parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Named Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>thrownBy</code></td>
+<td><a href="../Callers/CodeCaller.html"><code>CodeCaller</code></a></td>
+<td>full details of the code that is throwing the exception</td>
+</tr>
+<tr>
+<td><code>thrownByName</code></td>
+<td>string</td>
+<td>human-readable description of the code that is throwing the exception</td>
+</tr>
+</tbody>
+</table>
+<div class="callout info">
+<h4 id="filtering-the-backtrace">Filtering The Backtrace</h4>
+<p>By default, the code that extracts <code>thrownBy</code> et al from the backtrace reports the first two complete entries in the backtrace. (We say 'complete' because <a href="http://ganbarodigital.github.io/php-the-missing-bits/traces/HowThePhpStackFrameWorks.html">PHP stack traces are a little bit weird</a>).</p>
+<p>You probably don't want any reusable robustness checkers appearing as <code>thrownBy</code> in your <code>$data</code> list. You've delegated the check to a separate piece of code to avoid repeating code in your library or app. It's the code that's calling your reusable checker that should appear as <code>thrownBy</code>.</p>
+<p>You can avoid that by passing a list of fully-qualified classnames as the third parameter to <code>BuildThrownBy::from()</code>. The code that analyses the backtrace will ignore any stack frames that contain any classes in this list.</p>
+</div>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="in-a-parameterisedexception">In A ParameterisedException</h3>
+<p>The steps are:</p>
+<ol>
+<li>define your format string</li>
+<li>create your backtrace</li>
+<li>pass the format string and backtrace into <code>BuildThrownBy::from()</code></li>
+<li><code>BuildThrownBy::from()</code> returns an array containing
+<ul>
+<li>your new format string</li>
+<li>an array of named parameters and their values</li>
+</ul></li>
+<li>add any additional named parameters to the list</li>
+<li>call <code>ParameterisedException::__construct()</code> to finish building the exception</li>
+</ol>
+<p>Here's what this looks like as code:</p>
+<pre><code class="language-php">use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\
+    ParameterisedException;
+use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\
+    BuildThrownBy;
+
+class BadResponseCode extends ParameterisedException
+{
+    /**
+     * create a new exception
+     *
+     * @param  mixed $var
+     *         the variable that has the unsupported type
+     * @param  string $fieldOrVarName
+     *         the name of the input field, PHP variable or
+     *         function/method parameter that contains $data
+     * @param  array $callerFilter
+     *         are there any namespaces we want to filter out
+     *         of the call stack?
+     * @return BadResponseCode
+     *         an fully-built exception for you to throw
+     */
+    public static function newFromResponseCode(
+        $var,
+        $fieldOrVarName,
+        array $callerFilter = []
+    )
+    {
+        // what is our format string?
+        $formatString = "'%fieldOrVarName\$s' is a bad response code";
+
+        // who called us?
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+        // build the basic message and data
+        list($formatString, $data) = BuildThrownBy::from(
+            $formatString, $backtrace
+        );
+
+        // add in what's unique to us
+        $data['fieldOrVarName'] = $fieldOrVarName;
+
+        // all done
+        return new static($message, $data);
+    }
+}</code></pre>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigitalTest\ExceptionHelpers\V1\ParameterBuilders\BuildThrownBy
+ [x] will prepend thrower to message
+ [x] will return thrower in data block</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../BaseExceptions/ParameterisedException.html"><code>ParameterisedException</code></a> - the exception class that this helper builds information for</li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="BuildThrownAndCalledBy.html">Prev: BuildThrownAndCalledBy class</a></li>
+                                                      <li></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-exception-helpers/license.html">New BSD</a> license.
+                                            Find Exception Helpers Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-exception-helpers">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-exception-helpers/assets/ishi.js"></script>
+    </body>
+</html>
