@@ -9,8 +9,8 @@ pageflow_next_text: BuildThrownBy class
 
 # BuildThrownAndCalledBy
 
-<div class="callout warning">
-Not yet in a tagged release
+<div class="callout info">
+Since v1.2016061401
 </div>
 
 ## Description

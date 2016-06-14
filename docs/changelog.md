@@ -10,6 +10,12 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016061401
+
+Released Tue 14th June 2016.
+
 ### New
 
 * added helpers to standardise the structure of format strings and parameter lists that get fed into `ParameterisedException`
