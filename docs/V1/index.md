@@ -27,5 +27,6 @@ Namespace | Purpose
 ----------|--------
 [`GanbaroDigital\ExceptionHelpers\V1\BaseExceptions`](BaseExceptions/index.html) | base classes to build your own exceptions from
 [`GanbaroDigital\ExceptionHelpers\V1\Callers`](Callers/index.html) | work out who has thrown an exception
+[`GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders`](ParameterBuilders/index.html) | helpers for building [`ParameterisedException`](BaseExceptions/ParameterisedException.html)s with a standard data structure
 
 Click on the namespace to learn more about the classes in that component.
