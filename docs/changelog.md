@@ -12,6 +12,20 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016061901
+
+Released Sun 19th June 2016.
+
+### Refactor
+
+* `::newFromInputParameter()` and `::newFromVar()` static factory methods added
+  - added to `ParameterisedException`
+  - signature is new; breaks backwards-compatibility
+  - no longer declared in `UnsupportedType`
+  - no longer declared in `UnsupportedValue`
+
+According to Packagist, no third-party libraries are affected. We can safely make this necessary change.
+
 ## v1.2016061401
 
 Released Tue 14th June 2016.

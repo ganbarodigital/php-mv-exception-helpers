@@ -163,7 +163,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
             'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
             'calledByName' => 'ReflectionMethod->invokeArgs()',
             'fieldOrVarName' => '$alfred',
-            'var' => null,
+            'fieldOrVar' => null,
             'dataType' => 'NULL',
         ];
 
@@ -198,7 +198,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
             'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 10),
             'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 9),
             'fieldOrVarName' => '$alfred',
-            'var' => null,
+            'fieldOrVar' => null,
             'dataType' => 'NULL',
         ];
 
