@@ -74,6 +74,19 @@
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
 <p>Nothing yet.</p>
+<h2 id="v12016061901">v1.2016061901</h2>
+<p>Released Sun 19th June 2016.</p>
+<h3 id="refactor">Refactor</h3>
+<ul>
+<li><code>::newFromInputParameter()</code> and <code>::newFromVar()</code> static factory methods added
+<ul>
+<li>added to <code>ParameterisedException</code></li>
+<li>signature is new; breaks backwards-compatibility</li>
+<li>no longer declared in <code>UnsupportedType</code></li>
+<li>no longer declared in <code>UnsupportedValue</code></li>
+</ul></li>
+</ul>
+<p>According to Packagist, no third-party libraries are affected. We can safely make this necessary change.</p>
 <h2 id="v12016061401">v1.2016061401</h2>
 <p>Released Tue 14th June 2016.</p>
 <h3 id="new">New</h3>
@@ -105,7 +118,7 @@
 </ul>
 <h2 id="v12016052501">v1.2016052501</h2>
 <p>Released Wed 25th May 2016.</p>
-<h3 id="refactor">Refactor</h3>
+<h3 id="refactor-1">Refactor</h3>
 <ul>
 <li>Move the code caller functionality into <code>ganbarodigital/php-the-missing-bits</code>. This is the right place for the functionality to live.
 <ul>
