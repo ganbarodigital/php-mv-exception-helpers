@@ -70,6 +70,12 @@ class ParameterisedException extends RuntimeException
     private $formatString;
 
     /**
+     * default values for extra data
+     * @var array
+     */
+    static protected $defaultExtras = [];
+
+    /**
      * our constructor
      *
      * You should call one of the 'newFromXXX()' methods to create a new
@@ -125,6 +131,7 @@ class ParameterisedException extends RuntimeException
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,
+            static::$defaultExtras,
             $extraData,
             $typeFlags,
             $callerFilter
@@ -163,6 +170,7 @@ class ParameterisedException extends RuntimeException
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,
+            static::$defaultExtras,
             $extraData,
             $typeFlags,
             $callerFilter
@@ -185,6 +193,8 @@ class ParameterisedException extends RuntimeException
      *         the value that you're throwing an exception about
      * @param  string $fieldOrVarName
      *         the name of the value in your code
+     * @param  array $extraDefaults
+     *         default values for extra data that you want to include in your exception
      * @param  array $extra
      *         extra data that you want to include in your exception
      * @param  int|null $typeFlags
@@ -194,15 +204,22 @@ class ParameterisedException extends RuntimeException
      * @return ParameterisedException
      *         an fully-built exception for you to throw
      */
-    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, $extra, $typeFlags = null, array $callerFilter = [])
+    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, $extraDefaults, $extra, $typeFlags = null, array $callerFilter = [])
     {
         // build the basic message and data
         list($message, $data) = $builder::from($formatString, $backtrace);
 
-        // add in what's unique to us
+        // merge in our defaults
+        foreach ($extraDefaults as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        // merge in any extra data we've been given
         foreach ($extra as $key => $value) {
             $data[$key] = $value;
         }
+
+        // merge in the remainder of our parameters
         $data['dataType'] = GetPrintableType::of($fieldOrVar, $typeFlags);
         $data['fieldOrVarName'] = $fieldOrVarName;
         $data['fieldOrVar'] = $fieldOrVar;

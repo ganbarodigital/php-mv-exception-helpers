@@ -257,6 +257,45 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
 
         $data = null;
         $name = "\$alfred";
+
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 15) . ' says \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 13),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 12),
+            'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'calledByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Subclass::newFromInputParameter($data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * @covers ::newFromInputParameter
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_input_parameter_with_extra_data()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
         $extra = [ 'extra' => 'has been included' ];
 
         $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 15) . ' says \'$alfred\' cannot be \'NULL\'';
@@ -297,6 +336,43 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
 
         $data = null;
         $name = "\$alfred";
+
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ': \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 11),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 10),
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Subclass::newFromVar($data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * @covers ::newFromVar
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_PHP_variable_with_extra_data()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
         $extra = [ 'extra' => 'has been included' ];
 
         $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ': \'$alfred\' cannot be \'NULL\'';
@@ -328,4 +404,7 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
 class ParameterisedExceptionTest_Subclass extends ParameterisedException
 {
     static protected $defaultFormat = "'%fieldOrVarName\$s' cannot be '%dataType\$s'";
+    static protected $defaultExtras = [
+        'extra' => 'has not been included!!',
+    ];
 }

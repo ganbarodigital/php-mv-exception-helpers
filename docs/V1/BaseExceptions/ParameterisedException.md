@@ -44,6 +44,12 @@ class MyException extends ParameterisedException
 class ParameterisedException extends RuntimeException
 {
     /**
+     * default values for extra data
+     * @var array
+     */
+    static protected $extraDefaults = [];
+
+    /**
      * our constructor
      *
      * You should call one of the 'newFromXXX()' methods to create a new
@@ -303,10 +309,34 @@ Each _static factory method_ takes a parameter `$extraData`. This will be merged
 ```php
 class OutOfRange extends ParameterisedException
 {
-    static protected $msg_format = "'%fieldOrVarName\$s' cannot be higher than '%maxRange\$d'";
+    static protected $defaultFormat = "'%fieldOrVarName\$s' cannot be higher than '%maxRange\$d'";
 }
 
 throw OutOfRange::newFromVar($data, '$data', ['maxRange' => 100]);
+```
+
+### Setting Default Values For Extra Exception Data In Your Own Exceptions
+
+Each exception class can set the `static` property `$defaultExtras` to contain the default values of any extra data:
+
+```php
+class OutOfRange extends ParameterisedException
+{
+    static protected $defaultFormat = "'%fieldOrVarName\$s' cannot be higher than '%maxRange\$d'";
+    static protected $defaultExtras = ['maxRange' => 100];
+}
+```
+
+Defaults mean that it is safe to call the _static factory methods_ without providing an array of extra data:
+
+```php
+throw OutOfRange::newFromVar($data, '$data');
+```
+
+But the defaults can still be overridden if necessary:
+
+```php
+throw OutOfRange::newFromVar($data, '$data', ['maxRange' => 200]);
 ```
 
 ## Class Contract
@@ -322,7 +352,9 @@ Here is the contract for this class:
      [x] Can get message data
      [x] Can get message format string
      [x] can create from input parameter
+     [x] can create from input parameter with extra data
      [x] can create from PHP variable
+     [x] can create from PHP variable with extra data
 
 Class contracts are built from this class's unit tests.
 
