@@ -35,6 +35,12 @@ class ParameterisedException extends RuntimeException
     static protected $defaultExtras = [];
 
     /**
+     * default filter for the call stack
+     * @var array
+     */
+    static protected $defaultCallStackFilter = [];
+
+    /**
      * our constructor
      *
      * You should call one of the 'newFromXXX()' methods to create a new
@@ -62,7 +68,7 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final
      *         exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return ParameterisedException
@@ -73,7 +79,7 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $callStackFilter = []
     );
 
     /**
@@ -89,7 +95,7 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final
      *         exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return ParameterisedException
@@ -100,7 +106,7 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $callStackFilter = []
     );
 
     /**
@@ -121,7 +127,10 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the
      *         final exception message?
-     * @param  array $callerFilter
+     * @param  array $defaultCallStackFilter
+     *         are there any namespaces we want to filter out of
+     *         the call stack?
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return array
@@ -136,7 +145,8 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $defaultCallStackFilter = [],
+        array $callStackFilter = []
     );
 
     /**
@@ -324,6 +334,37 @@ But the defaults can still be overridden if necessary:
 throw OutOfRange::newFromVar($data, '$data', ['maxRange' => 200]);
 ```
 
+### Filtering The Call Stack
+
+The `throwBy`, `thrownByName`, `calledBy` and `calledByName` data is built when you call one of the static factory methods. A copy of the PHP call stack is taken, and the first two usable entries are used to build this data.
+
+Sometimes, you'll want to skip over some of the entries in the call stack. This is normally done in libraries that are providing reusable robustness or quality checks, such as our own [Contracts Library](https://ganbarodigital.github.io/php-mv-contracts/) and [Type-Checking Library](https://ganbarodigital.github.io/php-mv-type-checking/).
+
+You can filter the call stack by providing an array of classes as the `$callStackFilter` parameter:
+
+```php
+throw UnsupportedType::newFromVar($var, '$var', [], null, [self::class]);
+```
+
+You can also define a default call stack filter in your exception:
+
+```php
+class ContractFailed extends ParameterisedException
+{
+    // default filter for the call stack
+    static protected $defaultCallStackFilter = [
+        self::class,
+        static::class,
+        AssertValue::class,
+        CheckContracts::class,
+        Contracts::class,
+    ];
+}
+
+// no need to provide a call stack filter
+throw ContractFailed::newFromVar($var, '$var');
+```
+
 ## Class Contract
 
 Here is the contract for this class:
@@ -338,8 +379,12 @@ Here is the contract for this class:
      [x] Can get message format string
      [x] can create from input parameter
      [x] can create from input parameter with extra data
+     [x] can create from input parameter with default callerFilter
+     [x] can create from input parameter with callerFilter
      [x] can create from PHP variable
      [x] can create from PHP variable with extra data
+     [x] can create from PHP variable with default callerFilter
+     [x] can create from PHP variable with callerFilter
 
 Class contracts are built from this class's unit tests.
 
@@ -375,6 +420,16 @@ None at this time.
 * [Parameter builders](../ParameterBuilders/index.html) - helpers for building the `$formatString` and `$data` parameters for the constructor.
 
 ## Changelog
+
+### v1.2016061902
+
+* `$callerFilter` parameter is now known as `$callStackFilter`
+
+  We've renamed this parameter to make it easier to understand.
+
+* Added support for a default call stack filter
+
+  The static protected property `$defaultCallStackFilter` has been added.
 
 ### v1.2016061901
 

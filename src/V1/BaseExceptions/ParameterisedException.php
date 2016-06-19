@@ -76,6 +76,12 @@ class ParameterisedException extends RuntimeException
     static protected $defaultExtras = [];
 
     /**
+     * default filter for the call stack
+     * @var array
+     */
+    static protected $defaultCallStackFilter = [];
+
+    /**
      * our constructor
      *
      * You should call one of the 'newFromXXX()' methods to create a new
@@ -114,12 +120,12 @@ class ParameterisedException extends RuntimeException
      *         extra data that you want to include in your exception
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return UnsupportedType
      *         an fully-built exception for you to throw
      */
-    public static function newFromInputParameter($fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callerFilter = [])
+    public static function newFromInputParameter($fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callStackFilter = [])
     {
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -134,7 +140,8 @@ class ParameterisedException extends RuntimeException
             static::$defaultExtras,
             $extraData,
             $typeFlags,
-            $callerFilter
+            static::$defaultCallStackFilter,
+            $callStackFilter
         );
 
         // all done
@@ -153,12 +160,12 @@ class ParameterisedException extends RuntimeException
      *         extra data that you want to include in your exception
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return UnsupportedType
      *         an fully-built exception for you to throw
      */
-    public static function newFromVar($fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callerFilter = [])
+    public static function newFromVar($fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callStackFilter = [])
     {
         // who called us?
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -173,7 +180,8 @@ class ParameterisedException extends RuntimeException
             static::$defaultExtras,
             $extraData,
             $typeFlags,
-            $callerFilter
+            static::$defaultCallStackFilter,
+            $callStackFilter
         );
 
         // all done
@@ -199,15 +207,22 @@ class ParameterisedException extends RuntimeException
      *         extra data that you want to include in your exception
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array $callerFilter
+     * @param  array $defaultCallStackFilter
+     *         are there any namespaces we want to filter out of the call stack?
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return ParameterisedException
      *         an fully-built exception for you to throw
      */
-    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, $extraDefaults, $extra, $typeFlags = null, array $callerFilter = [])
+    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, $extraDefaults, $extra, $typeFlags = null, array $defaultCallStackFilter = [], array $callStackFilter = [])
     {
+        // merge the defaults into the provided call stack filter
+        foreach ($defaultCallStackFilter as $className) {
+            $callStackFilter[] = $className;
+        }
+
         // build the basic message and data
-        list($message, $data) = $builder::from($formatString, $backtrace);
+        list($message, $data) = $builder::from($formatString, $backtrace, $callStackFilter);
 
         // merge in our defaults
         foreach ($extraDefaults as $key => $value) {
