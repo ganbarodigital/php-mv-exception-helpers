@@ -47,7 +47,7 @@ class ParameterisedException extends RuntimeException
      * default values for extra data
      * @var array
      */
-    static protected $extraDefaults = [];
+    static protected $defaultExtras = [];
 
     /**
      * our constructor
