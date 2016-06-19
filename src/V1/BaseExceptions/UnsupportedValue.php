@@ -56,7 +56,7 @@ use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatus
  */
 class UnsupportedValue extends ParameterisedException implements HttpRuntimeErrorException
 {
-    protected static $msg_format="'%fieldOrVarName\$s' of type %dataType\$s contains an unsupported value";
+    protected static $defaultFormat="'%fieldOrVarName\$s' of type %dataType\$s contains an unsupported value";
 
     // adds 'getHttpStatus()' that returns a HTTP 500 status value object
     use UnexpectedErrorStatusProvider;

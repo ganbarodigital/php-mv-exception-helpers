@@ -121,7 +121,7 @@ class ParameterisedException extends RuntimeException
         // build the message and data
         list($message, $data) = self::buildFormatAndData(
             BuildThrownAndCalledBy::class,
-            static::$msg_format,
+            static::$defaultFormat,
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,
@@ -159,7 +159,7 @@ class ParameterisedException extends RuntimeException
         // build the basic message and data
         list($message, $data) = self::buildFormatAndData(
             BuildThrownBy::class,
-            static::$msg_format,
+            static::$defaultFormat,
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,

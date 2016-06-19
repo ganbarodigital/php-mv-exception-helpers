@@ -181,7 +181,7 @@ class UnsupportedType
   extends ParameterisedException
   implements HttpRuntimeErrorException
 {
-    static protected $msg_format =
+    static protected $defaultFormat =
         "'%fieldOrVarName\$s' cannot be '%dataType\$s'";
 
     // adds 'getHttpStatus()' that returns a HTTP 500 status value object
@@ -192,7 +192,7 @@ class UnsupportedType
 In this example, `UnsupportedType`:
 
 * `extends ParameterisedException` to create a new exception class
-* defines a format string as the `$msg_format` protected class property
+* defines a format string as the `$defaultFormat` protected class property
 * maps onto the HTTP 500 status code by `implements HttpRuntimeErrorException` and `use UnexpectedErrorStatusProvider` together
 
 There's no need for `UnsupportedType` to create its own _static factory methods_. It automatically inherits the ones defined by `ParameterisedException`. (They are discussed in more detail below).
@@ -255,12 +255,12 @@ throw new ParameterisedException($format, $data);
 
 ### The Format String In Your Own Exceptions
 
-Our _static factory methods_ expect you to add `static protected $msg_format` to your own exceptions. This will contain the _format string_ that they will customise.
+Our _static factory methods_ expect you to add `static protected $defaultFormat` to your own exceptions. This will contain the _format string_ that they will customise.
 
 Factory Method | Customised Format String
 ---------------|------------
-`::newFromInputParameter()` | `%calledByName$s: %thrownByName$s says $msg_format`
-`::newFromVar()` | `%thrownByName$s: $msg_format`
+`::newFromInputParameter()` | `%calledByName$s: %thrownByName$s says $defaultFormat`
+`::newFromVar()` | `%thrownByName$s: $defaultFormat`
 
 ### Exception Data
 

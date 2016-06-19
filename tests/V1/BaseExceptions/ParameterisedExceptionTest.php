@@ -327,5 +327,5 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
 
 class ParameterisedExceptionTest_Subclass extends ParameterisedException
 {
-    static protected $msg_format = "'%fieldOrVarName\$s' cannot be '%dataType\$s'";
+    static protected $defaultFormat = "'%fieldOrVarName\$s' cannot be '%dataType\$s'";
 }
