@@ -65,18 +65,6 @@
 </div>
 <h2 id="description">Description</h2>
 <p><code>ParameterisedException</code> is a base class that builds the exception's message from a supplied format string and data set. The data set is stored in the exception. This can be logged and/or inspected to help with debugging and troubleshooting.</p>
-<pre><code class="language-php">// import
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-
-// inherit from ParameterisedException
-class MyException extends ParameterisedException
-{
-    // we recommend using static factory methods for creating exceptions
-    public static function newFromData($data)
-    {
-        return new static($formatString, $data);
-    }
-}</code></pre>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>ParameterisedException</code> has the following public interface:</p>
 <pre><code class="language-php">/**
@@ -89,7 +77,13 @@ class ParameterisedException extends RuntimeException
      * default values for extra data
      * @var array
      */
-    static protected $extraDefaults = [];
+    static protected $defaultExtras = [];
+
+    /**
+     * default filter for the call stack
+     * @var array
+     */
+    static protected $defaultCallStackFilter = [];
 
     /**
      * our constructor
@@ -119,7 +113,7 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final
      *         exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return ParameterisedException
@@ -130,7 +124,7 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $callStackFilter = []
     );
 
     /**
@@ -146,7 +140,7 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final
      *         exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return ParameterisedException
@@ -157,7 +151,7 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $callStackFilter = []
     );
 
     /**
@@ -178,7 +172,7 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the
      *         final exception message?
-     * @param  array $callerFilter
+     * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
      * @return array
@@ -193,7 +187,7 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $callerFilter = []
+        array $callStackFilter = []
     );
 
     /**
@@ -400,6 +394,26 @@ throw OutOfRange::newFromVar($data, '$data', ['maxRange' =&gt; 100]);</code></pr
 <pre><code class="language-php">throw OutOfRange::newFromVar($data, '$data');</code></pre>
 <p>But the defaults can still be overridden if necessary:</p>
 <pre><code class="language-php">throw OutOfRange::newFromVar($data, '$data', ['maxRange' =&gt; 200]);</code></pre>
+<h3 id="filtering-the-call-stack">Filtering The Call Stack</h3>
+<p>The <code>throwBy</code>, <code>thrownByName</code>, <code>calledBy</code> and <code>calledByName</code> data is built when you call one of the static factory methods. A copy of the PHP call stack is taken, and the first two usable entries are used to build this data.</p>
+<p>Sometimes, you'll want to skip over some of the entries in the call stack. This is normally done in libraries that are providing reusable robustness or quality checks, such as our own <a href="https://ganbarodigital.github.io/php-mv-contracts/">Contracts Library</a> and <a href="https://ganbarodigital.github.io/php-mv-type-checking/">Type-Checking Library</a>.</p>
+<p>You can filter the call stack by providing an array of classes as the <code>$callStackFilter</code> parameter:</p>
+<pre><code class="language-php">throw UnsupportedType::newFromVar($var, '$var', [], null, [self::class]);</code></pre>
+<p>You can also define a default call stack filter in your exception:</p>
+<pre><code class="language-php">class ContractFailed extends ParameterisedException
+{
+    // default filter for the call stack
+    static protected $defaultCallStackFilter = [
+        self::class,
+        static::class,
+        AssertValue::class,
+        CheckContracts::class,
+        Contracts::class,
+    ];
+}
+
+// no need to provide a call stack filter
+throw ContractFailed::newFromVar($var, '$var');</code></pre>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
 <pre><code>GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException
@@ -412,8 +426,12 @@ throw OutOfRange::newFromVar($data, '$data', ['maxRange' =&gt; 100]);</code></pr
  [x] Can get message format string
  [x] can create from input parameter
  [x] can create from input parameter with extra data
+ [x] can create from input parameter with default callerFilter
+ [x] can create from input parameter with callerFilter
  [x] can create from PHP variable
- [x] can create from PHP variable with extra data</code></pre>
+ [x] can create from PHP variable with extra data
+ [x] can create from PHP variable with default callerFilter
+ [x] can create from PHP variable with callerFilter</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -442,6 +460,17 @@ Future releases of this class will not break this contract.
 <li><a href="../ParameterBuilders/index.html">Parameter builders</a> - helpers for building the <code>$formatString</code> and <code>$data</code> parameters for the constructor.</li>
 </ul>
 <h2 id="changelog">Changelog</h2>
+<h3 id="v12016061902">v1.2016061902</h3>
+<ul>
+<li>
+<p><code>$callerFilter</code> parameter is now known as <code>$callStackFilter</code></p>
+<p>We've renamed this parameter to make it easier to understand.</p>
+</li>
+<li>
+<p>Added support for a default call stack filter</p>
+<p>The static protected property <code>$defaultCallStackFilter</code> has been added.</p>
+</li>
+</ul>
 <h3 id="v12016061901">v1.2016061901</h3>
 <ul>
 <li>
