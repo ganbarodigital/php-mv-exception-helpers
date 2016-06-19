@@ -137,11 +137,9 @@ class ParameterisedException extends RuntimeException
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,
-            static::$defaultExtras,
-            $extraData,
+            array_merge_keys(static::$defaultExtras, $extraData),
             $typeFlags,
-            static::$defaultCallStackFilter,
-            $callStackFilter
+            array_append_values(static::$defaultCallStackFilter, $callStackFilter)
         );
 
         // all done
@@ -177,11 +175,9 @@ class ParameterisedException extends RuntimeException
             $backtrace,
             $fieldOrVar,
             $fieldOrVarName,
-            static::$defaultExtras,
-            $extraData,
+            array_merge_keys(static::$defaultExtras, $extraData),
             $typeFlags,
-            static::$defaultCallStackFilter,
-            $callStackFilter
+            array_append_values(static::$defaultCallStackFilter, $callStackFilter)
         );
 
         // all done
@@ -201,38 +197,22 @@ class ParameterisedException extends RuntimeException
      *         the value that you're throwing an exception about
      * @param  string $fieldOrVarName
      *         the name of the value in your code
-     * @param  array $extraDefaults
-     *         default values for extra data that you want to include in your exception
-     * @param  array $extra
+     * @param  array $extraData
      *         extra data that you want to include in your exception
      * @param  int|null $typeFlags
      *         do we want any extra type information in the final exception message?
-     * @param  array $defaultCallStackFilter
-     *         are there any namespaces we want to filter out of the call stack?
      * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of the call stack?
      * @return ParameterisedException
      *         an fully-built exception for you to throw
      */
-    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, $extraDefaults, $extra, $typeFlags = null, array $defaultCallStackFilter = [], array $callStackFilter = [])
+    protected static function buildFormatAndData($builder, $formatString, $backtrace, $fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callStackFilter = [])
     {
-        // merge the defaults into the provided call stack filter
-        foreach ($defaultCallStackFilter as $className) {
-            $callStackFilter[] = $className;
-        }
-
         // build the basic message and data
         list($message, $data) = $builder::from($formatString, $backtrace, $callStackFilter);
 
-        // merge in our defaults
-        foreach ($extraDefaults as $key => $value) {
-            $data[$key] = $value;
-        }
-
         // merge in any extra data we've been given
-        foreach ($extra as $key => $value) {
-            $data[$key] = $value;
-        }
+        $data = array_merge_keys($data, $extraData);
 
         // merge in the remainder of our parameters
         $data['dataType'] = GetPrintableType::of($fieldOrVar, $typeFlags);

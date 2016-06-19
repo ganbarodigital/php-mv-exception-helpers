@@ -127,9 +127,6 @@ class ParameterisedException extends RuntimeException
      * @param  int|null $typeFlags
      *         do we want any extra type information in the
      *         final exception message?
-     * @param  array $defaultCallStackFilter
-     *         are there any namespaces we want to filter out of
-     *         the call stack?
      * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
@@ -145,7 +142,6 @@ class ParameterisedException extends RuntimeException
         $fieldOrVarName,
         array $extraData = [],
         $typeFlags = null,
-        array $defaultCallStackFilter = [],
         array $callStackFilter = []
     );
 
