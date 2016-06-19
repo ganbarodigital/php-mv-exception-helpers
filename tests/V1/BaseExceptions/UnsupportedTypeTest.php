@@ -156,13 +156,14 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         $data = null;
         $name = "\$alfred";
 
-        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ' says \'$alfred\' cannot be type \'NULL\'';
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 14) . ' says \'$alfred\' cannot be type \'NULL\'';
         $expectedData = [
-            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 11),
-            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 10),
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 12),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 11),
             'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
             'calledByName' => 'ReflectionMethod->invokeArgs()',
             'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
             'dataType' => 'NULL',
         ];
 
@@ -192,11 +193,12 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         $data = null;
         $name = "\$alfred";
 
-        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 11) . ': \'$alfred\' cannot be type \'NULL\'';
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 12) . ': \'$alfred\' cannot be type \'NULL\'';
         $expectedData = [
-            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 9),
-            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 8),
+            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 10),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 9),
             'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
             'dataType' => 'NULL'
         ];
 

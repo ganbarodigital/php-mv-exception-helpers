@@ -43,13 +43,10 @@
 
 namespace GanbaroDigital\ExceptionHelpers\V1\BaseExceptions;
 
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
 use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\BuildThrownAndCalledBy;
 use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\BuildThrownBy;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
-use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
 
 /**
  * UnsupportedType is thrown whenever input data fails validation because
@@ -59,70 +56,8 @@ use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
  */
 class UnsupportedType extends ParameterisedException implements HttpRuntimeErrorException
 {
-    const MSG_VAR = "'%fieldOrVarName\$s' cannot be type '%dataType\$s'";
+    protected static $msg_format = "'%fieldOrVarName\$s' cannot be type '%dataType\$s'";
 
     // adds 'getHttpStatus()' that returns a HTTP 500 status value object
     use UnexpectedErrorStatusProvider;
-
-    /**
-     * create a new exception
-     *
-     * @param  mixed $var
-     *         the variable that has the unsupported type
-     * @param  string $fieldOrVarName
-     *         the name of the input field, PHP variable or function/method
-     *         parameter that contains $data
-     * @param  int|null $typeFlags
-     *         do we want any extra type information in the final exception message?
-     * @param  array $callerFilter
-     *         are there any namespaces we want to filter out of the call stack?
-     * @return UnsupportedType
-     *         an fully-built exception for you to throw
-     */
-    public static function newFromInputParameter($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
-    {
-        // who called us?
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-        // build the basic message and data
-        list($message, $data) = BuildThrownAndCalledBy::from(self::MSG_VAR, $backtrace);
-
-        // add in what's unique to us
-        $data['dataType'] = GetPrintableType::of($var, $typeFlags);
-        $data['fieldOrVarName'] = $fieldOrVarName;
-
-        // all done
-        return new static($message, $data);
-    }
-
-    /**
-     * create a new exception
-     *
-     * @param  mixed $var
-     *         the variable that has the unsupported type
-     * @param  string $fieldOrVarName
-     *         the name of the input field, PHP variable or function/method
-     *         parameter that contains $data
-     * @param  int|null $typeFlags
-     *         do we want any extra type information in the final exception message?
-     * @param  array $callerFilter
-     *         are there any namespaces we want to filter out of the call stack?
-     * @return UnsupportedType
-     *         an fully-built exception for you to throw
-     */
-    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, array $callerFilter = [])
-    {
-        // who called us?
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-        // build the basic message and data
-        list($message, $data) = BuildThrownBy::from(self::MSG_VAR, $backtrace);
-
-        // add in what's unique to us
-        $data['dataType'] = GetPrintableType::of($var, $typeFlags);
-        $data['fieldOrVarName'] = $fieldOrVarName;
-
-        // all done
-        return new static($message, $data);
-    }
 }

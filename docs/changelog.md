@@ -10,7 +10,15 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Refactor
+
+* `::newFromInputParameter()` and `::newFromVar()` static factory methods added
+  - added to `ParameterisedException`
+  - signature is new; breaks backwards-compatibility
+  - no longer declared in `UnsupportedType`
+  - no longer declared in `UnsupportedValue`
+
+According to Packagist, no third-party libraries are affected. We can safely make this necessary change.
 
 ## v1.2016061401
 
