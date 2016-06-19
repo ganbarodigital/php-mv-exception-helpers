@@ -14,7 +14,7 @@
     "require": {
         "php": ">= 5.5",
         "ganbarodigital/php-http-status": "^2.0",
-        "ganbarodigital/php-the-missing-bits": "^1.1"
+        "ganbarodigital/php-the-missing-bits": "^1.7"
     },
     "require-dev": {
         "couscous/couscous": "dev-develop",

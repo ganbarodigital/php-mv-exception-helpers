@@ -12,6 +12,14 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016061902
+
+Released Sun 19th June 2016.
+
+### New
+
+* Added support for a default call stack filter
+
 ## v1.2016061901
 
 Released Sun 19th June 2016.

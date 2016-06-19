@@ -326,6 +326,85 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::newFromInputParameter
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_input_parameter_with_default_callerFilter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 15) . ' says \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 13),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 12),
+            'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'calledByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Target::fail(ParameterisedExceptionTest_FilteredSubclass::class, 'newFromInputParameter', $data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * @covers ::newFromInputParameter
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_input_parameter_with_callerFilter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+        $callStackFilter = ['GanbaroDigitalTest\\ExceptionHelpers\\V1\BaseExceptions\\ParameterisedExceptionTest_Target'];
+
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): ' . __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 15) . ' says \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 13),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 12),
+            'calledBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'calledByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Target::fail(ParameterisedExceptionTest_Subclass::class, 'newFromInputParameter', $data, $name, [], null, $callStackFilter);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
      * @covers ::newFromVar
      * @covers ::buildFormatAndData
      */
@@ -399,6 +478,81 @@ class ParameterisedExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedMessage, $actualMessage);
         $this->assertEquals($expectedData, $actualData);
     }
+
+    /**
+     * @covers ::newFromVar
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_PHP_variable_with_default_callerFilter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 13) . ': \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller(self::class, __FUNCTION__, '->', __FILE__, __LINE__ + 11),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@' . (__LINE__ + 10),
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Target::fail(ParameterisedExceptionTest_FilteredSubclass::class, 'newFromVar', $data, $name);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
+
+    /**
+     * @covers ::newFromVar
+     * @covers ::buildFormatAndData
+     */
+    public function test_can_create_from_PHP_variable_with_callerFilter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = null;
+        $name = "\$alfred";
+        $callStackFilter = [self::class];
+
+        $expectedMessage = 'ReflectionMethod->invokeArgs(): \'$alfred\' cannot be \'NULL\'';
+        $expectedData = [
+            'thrownBy' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
+            'thrownByName' => 'ReflectionMethod->invokeArgs()',
+            'fieldOrVarName' => '$alfred',
+            'fieldOrVar' => null,
+            'dataType' => 'NULL',
+            'extra' => 'has not been included!!',
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = ParameterisedExceptionTest_Subclass::newFromVar($data, $name, [], null, $callStackFilter);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $actualMessage = $unit->getMessage();
+        $actualData = $unit->getMessageData();
+
+        $this->assertEquals($expectedMessage, $actualMessage);
+        $this->assertEquals($expectedData, $actualData);
+    }
 }
 
 class ParameterisedExceptionTest_Subclass extends ParameterisedException
@@ -407,4 +561,24 @@ class ParameterisedExceptionTest_Subclass extends ParameterisedException
     static protected $defaultExtras = [
         'extra' => 'has not been included!!',
     ];
+}
+
+class ParameterisedExceptionTest_FilteredSubclass extends ParameterisedException
+{
+    static protected $defaultFormat = "'%fieldOrVarName\$s' cannot be '%dataType\$s'";
+    static protected $defaultExtras = [
+        'extra' => 'has not been included!!',
+    ];
+    static protected $defaultCallStackFilter = [
+        'GanbaroDigitalTest\\ExceptionHelpers\\V1\BaseExceptions\\ParameterisedExceptionTest_Target',
+    ];
+}
+
+// we need this to guarantee the contents at the top of the stack trace
+class ParameterisedExceptionTest_Target
+{
+    static public function fail($exceptionClass, $method, $fieldOrVar, $fieldOrVarName, array $extraData = [], $typeFlags = null, array $callStackFilter = [])
+    {
+        return $exceptionClass::$method($fieldOrVar, $fieldOrVarName, $extraData, $typeFlags, $callStackFilter);
+    }
 }
